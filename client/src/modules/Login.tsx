@@ -7,7 +7,7 @@ import { Header } from '../components/Header';
 import { HeroParticles } from '../components/HeroParticles';
 import Wrapper from '../components/Wrapper';
 import Input from '../components/Input';
-import accountIcon from '../images/icons/account_circle.svg';
+import accountIcon from '../assets/icons/account_circle.svg';
 
 interface LoginProps extends RouteComponentProps {}
 

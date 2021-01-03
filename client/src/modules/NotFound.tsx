@@ -6,7 +6,7 @@ import { Footer } from '../components/Footer';
 import GlobalStyle from '../components/GlobalStyle';
 import { Header } from '../components/Header';
 import Wrapper from '../components/Wrapper';
-import spy from '../images/pieces/w1忍.svg';
+import spy from '../assets/pieces/w1忍.svg';
 
 const TextStyle = styled.div`
 	font-size: 1em;

@@ -1,60 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Footer } from '../components/Footer';
 import GlobalStyle from '../components/GlobalStyle';
 import { Header } from '../components/Header';
 import GameButton from '../components/GameButton';
 import WrapperSpaceBetween from '../components/WrapperSpaceBetween';
-import boardIcon from '../images/gungiboard.svg';
+import { TurnIndictor } from '../components/TurnIndictor';
+import { RouteComponentProps } from 'react-router-dom';
+import { StockpilePanel } from '../components/StockpilePanel';
+import { TowerDetails } from '../components/TowerDetails';
 
-// TODO: uninstall and remove dependency, the below is for ui testing purposes only
+// TODO: remove dependency, the below is for ui testing purposes only (instead store game on server and fetch state by api call after each turn)
 import * as Gungi from 'gungi.js';
-import Panel from '../components/Panel';
-import styled from 'styled-components';
-import { Badge, Icon, makeStyles } from '@material-ui/core';
+import boardIcon from '../assets/gungiboard.svg';
+import { Board } from '../components/gameboard/Board';
 const gungi: any = new Gungi();
 
-function importAll(r) {
-	let images = {};
-	r.keys().forEach((item, index) => {
-		images[item.replace('./', '')] = r(item);
-	});
-	return images;
-}
+interface GameProps extends RouteComponentProps {}
 
-const pieces = importAll(require.context('../images/pieces', false, /.svg/));
-
-const TitleStyle = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	align-items: center;
-`;
-
-interface GameProps {}
-
-export const Game: React.FC<GameProps> = () => {
+export const Game: React.FC<GameProps> = ({ history }) => {
 	document.title = 'Game | Gungi.io';
-	console.log(gungi.ascii());
 
-	const useStyles = makeStyles((theme) => ({
-		margin: {
-			margin: theme.spacing(1),
-		},
-		customBadge: {
-			backgroundColor: '#9045d6',
-			color: 'white',
-			fontFamily: 'Montserrat',
-			transform: 'scale(1) translate(35%, -35%)',
-		},
-	}));
-	const classes = useStyles();
+	const [moveTypeSelected, setMoveTypeSelected] = useState(() => {
+		return 'PLACE';
+	});
 
 	return (
 		<>
 			<GlobalStyle />
 			<Header home={false} />
 
-			<div style={{ height: '100vh' }}>
+			<div style={{ minHeight: '100%', margin: '1.1rem 0' }}>
 				<div
 					style={{
 						display: 'flex',
@@ -84,30 +59,57 @@ export const Game: React.FC<GameProps> = () => {
 							<GameButton
 								backgroundColor="#29DA37"
 								backgroundColorHover="#0CB51A"
+								selected={moveTypeSelected === 'PLACE'}
+								onClick={() => {
+									setMoveTypeSelected('PLACE');
+								}}
 							>
 								PLACE
 							</GameButton>
 
-							<GameButton
-								backgroundColor="#3C85F5"
-								backgroundColorHover="#2169D8"
-							>
-								MOVE
-							</GameButton>
+							{gungi.phase() === 'game' ? (
+								<>
+									<GameButton
+										backgroundColor="#3C85F5"
+										backgroundColorHover="#2169D8"
+										selected={moveTypeSelected === 'MOVE'}
+										onClick={() => {
+											setMoveTypeSelected('MOVE');
+										}}
+									>
+										MOVE
+									</GameButton>
 
-							<GameButton
-								backgroundColor="#F53C5E"
-								backgroundColorHover="#E1294A"
-							>
-								ATTACK
-							</GameButton>
+									<GameButton
+										backgroundColor="#F53C5E"
+										backgroundColorHover="#E1294A"
+										selected={moveTypeSelected === 'ATTACK'}
+										onClick={() => {
+											setMoveTypeSelected('ATTACK');
+										}}
+									>
+										ATTACK
+									</GameButton>
 
-							<GameButton
-								backgroundColor="#F5AB3C"
-								backgroundColorHover="#DF921F"
-							>
-								STACK
-							</GameButton>
+									<GameButton
+										backgroundColor="#F5AB3C"
+										backgroundColorHover="#DF921F"
+										selected={moveTypeSelected === 'STACK'}
+										onClick={() => {
+											setMoveTypeSelected('STACK');
+										}}
+									>
+										STACK
+									</GameButton>
+								</>
+							) : (
+								<GameButton
+									backgroundColor="#16CD8B"
+									backgroundColorHover="#00B172"
+								>
+									READY
+								</GameButton>
+							)}
 						</WrapperSpaceBetween>
 
 						<WrapperSpaceBetween>
@@ -117,13 +119,16 @@ export const Game: React.FC<GameProps> = () => {
 									fontWeight: 'bolder',
 								}}
 							>
-								Draft Phase
+								{gungi.phase() === 'game' ? 'Game Phase' : 'Draft Phase'}
 							</div>
 
 							<div>
 								<GameButton
 									backgroundColor="#9044D6"
 									backgroundColorHover="#7E42DF"
+									onClick={() => {
+										history.push('/lobby');
+									}}
 								>
 									LOBBY
 								</GameButton>
@@ -134,129 +139,40 @@ export const Game: React.FC<GameProps> = () => {
 								>
 									FORFEIT
 								</GameButton>
-
-								{/* <GameButton
-									backgroundColor="#16CD8B"
-									backgroundColorHover="#00B172"
-								>
-									READY
-								</GameButton> */}
 							</div>
 						</WrapperSpaceBetween>
 
 						<WrapperSpaceBetween>
-							<TitleStyle>
-								<div
-									style={{
-										fontSize: '1rem',
-										fontWeight: 'bolder',
-										opacity: '100%',
-										color: '#D468FA',
-									}}
-								>
-									player 1
-								</div>
-
-								<img
-									src={pieces['b1帥.svg'].default}
-									alt="piece"
-									style={{ width: '32px', paddingLeft: '20px' }}
-								/>
-							</TitleStyle>
-
-							<TitleStyle>
-								<div
-									style={{
-										fontSize: '1rem',
-										fontWeight: 'bolder',
-										opacity: '75%',
-									}}
-								>
-									player 2
-								</div>
-								<img
-									src={pieces['w1帥.svg'].default}
-									alt="piece"
-									style={{ width: '32px', paddingLeft: '20px' }}
-								/>
-							</TitleStyle>
+							<TurnIndictor
+								player="b"
+								isTurn={'b' === gungi.turn()}
+								playerName="player 1"
+							/>
+							<TurnIndictor
+								player="w"
+								isTurn={'w' === gungi.turn()}
+								playerName="player 2"
+							/>
 						</WrapperSpaceBetween>
 
-						<Panel
-							color="secondary"
-							style={{
-								padding: '1em 1em 6em 1em',
-								width: '95%',
-								margin: 'auto',
-							}}
-						>
-							<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
-								Tower Details
-							</div>
-						</Panel>
+						<TowerDetails />
+						<br />
+						<StockpilePanel
+							player="b"
+							playerName="player 1"
+							playerStockPile={gungi.stockpile(gungi.BLACK)}
+						/>
 
 						<br />
-						<Panel
-							color="secondary"
-							style={{
-								padding: '1em',
-								width: '95%',
-								margin: 'auto',
-							}}
-						>
-							<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
-								player 1's stockpile
-							</div>
-							<br />
-							{gungi.stockpile(gungi.BLACK).map((stock_piece) => (
-								<Badge
-									key={`b${stock_piece.piece.type}`}
-									badgeContent={stock_piece.amount}
-									classes={{ badge: classes.customBadge }}
-									className={classes.margin}
-								>
-									<Icon style={{ fontSize: '48px' }}>
-										<img
-											src={pieces[`b1${stock_piece.piece.type}.svg`].default}
-											alt={`b1${stock_piece.piece.type}`}
-											style={{ width: '48px' }}
-										/>
-									</Icon>
-								</Badge>
-							))}
-						</Panel>
+						<StockpilePanel
+							player="w"
+							playerName="player 2"
+							playerStockPile={gungi.stockpile(gungi.WHITE)}
+						/>
 
-						<br />
-						<Panel
-							color="secondary"
-							style={{
-								padding: '1em',
-								width: '95%',
-								margin: 'auto',
-							}}
-						>
-							<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
-								player 2's stockpile
-							</div>
-
-							<br />
-							{gungi.stockpile(gungi.WHITE).map((stock_piece) => (
-								<Badge
-									key={`w${stock_piece.piece.type}`}
-									badgeContent={stock_piece.amount}
-									classes={{ badge: classes.customBadge }}
-									className={classes.margin}
-								>
-									<Icon style={{ fontSize: '48px' }}>
-										<img
-											src={pieces[`w1${stock_piece.piece.type}.svg`].default}
-											alt={`w1${stock_piece.piece.type}`}
-											style={{ width: '48px' }}
-										/>
-									</Icon>
-								</Badge>
-							))}
-						</Panel>
+						<div>
+							<Board></Board>
+						</div>
 					</div>
 				</div>
 			</div>

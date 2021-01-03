@@ -42,8 +42,9 @@ export const About: React.FC<AboutProps> = () => {
 					Gungi is a two-player strategy board game created by Yoshihiro Togashi
 					and is featured in the in the popular manga{' '}
 					<LinkStyle href="https://hunterxhunter.fandom.com/wiki/Hunter_%C3%97_Hunter">
-						Hunter × Hunter.
+						Hunter × Hunter
 					</LinkStyle>
+					.
 					<br />
 					<br />
 					It is played on a non-checkered gameboard with 81 squares arranged in

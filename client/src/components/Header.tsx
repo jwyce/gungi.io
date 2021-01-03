@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import spy from '../images/pieces/w1忍.svg';
+import spy from '../assets/pieces/w1忍.svg';
 
 interface HeaderProps {
 	home: boolean;

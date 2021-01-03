@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import spy from '../images/pieces/w1忍.svg';
+import spy from '../assets/pieces/w1忍.svg';
 
 const FooterStyle = styled.section`
 	display: flex;

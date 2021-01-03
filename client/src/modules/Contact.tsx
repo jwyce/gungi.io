@@ -5,8 +5,8 @@ import GlobalStyle from '../components/GlobalStyle';
 import { Header } from '../components/Header';
 import Panel from '../components/Panel';
 import Paragraph from '../components/Paragraph';
-import coffeeIcon from '../images/icons/buymeacoffee.svg';
-import feedbackIcon from '../images/icons/sendmail.svg';
+import coffeeIcon from '../assets/icons/buymeacoffee.svg';
+import feedbackIcon from '../assets/icons/sendmail.svg';
 
 interface ContactProps {}
 

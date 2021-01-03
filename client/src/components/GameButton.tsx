@@ -1,8 +1,10 @@
+import { darken } from 'polished';
 import styled from 'styled-components';
 
 export default styled.button<{
 	backgroundColor: string;
 	backgroundColorHover: string;
+	selected?: boolean;
 }>`
 	padding: 0 1.5rem;
 	height: 2.5rem;
@@ -28,7 +30,10 @@ export default styled.button<{
 	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
+
 	&:hover {
 		background-color: ${(props) => props.backgroundColorHover};
 	}
+	border: 4px solid
+		${(props) => (props.selected ? darken(0.2, props.backgroundColorHover) : 0)};
 `;

@@ -6,7 +6,7 @@ import Panel from '../components/Panel';
 import Paragraph from '../components/Paragraph';
 import LobbyButton from '../components/LobbyButton';
 import { RouteComponentProps } from 'react-router-dom';
-import accountIcon from '../images/icons/account_circle.svg';
+import accountIcon from '../assets/icons/account_circle.svg';
 
 interface LobbyProps extends RouteComponentProps {}
 

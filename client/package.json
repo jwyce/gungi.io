@@ -8,12 +8,12 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
     "@types/jest": "^26.0.19",
-    "@types/node": "^12.19.11",
     "@types/react": "^16.14.2",
     "@types/react-dom": "^16.9.10",
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.7",
     "gungi.js": "^1.0.0",
+    "polished": "^4.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-particles-js": "^3.4.1",
@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^12.19.11",
     "@types/webpack-env": "^1.16.0"
   }
 }

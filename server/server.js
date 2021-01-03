@@ -6,6 +6,8 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const { Gungi } = require('gungi.js');
 
+//TODO: limit number of active games per user to 5
+
 app.get('/', (req, res) => {
 	res.send('just gonna send it');
 });
