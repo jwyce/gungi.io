@@ -23,10 +23,10 @@ function importAll(r) {
 	return images;
 }
 
-const pieces = importAll(require.context('../assets/pieces', false, /.svg/));
+const pieces = importAll(require.context('../../assets/pieces', false, /.svg/));
 
 const mobility = importAll(
-	require.context('../assets/mobility', false, /.svg/)
+	require.context('../../assets/mobility', false, /.svg/)
 );
 
 interface MobilityProps {

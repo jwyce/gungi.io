@@ -1,4 +1,3 @@
-import { darken } from 'polished';
 import styled from 'styled-components';
 
 export default styled.button<{
@@ -34,6 +33,6 @@ export default styled.button<{
 	&:hover {
 		background-color: ${(props) => props.backgroundColorHover};
 	}
-	border: 4px solid
-		${(props) => (props.selected ? darken(0.2, props.backgroundColorHover) : 0)};
+	box-shadow: ${(props) =>
+		props.selected ? 'inset 0 -0.175em #9045d6' : 'none'};
 `;

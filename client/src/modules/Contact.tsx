@@ -1,12 +1,12 @@
 import React from 'react';
-import Button from '../components/Button';
-import { Footer } from '../components/Footer';
-import GlobalStyle from '../components/GlobalStyle';
-import { Header } from '../components/Header';
-import Panel from '../components/Panel';
-import Paragraph from '../components/Paragraph';
+import Button from '../components/ui/Button';
+import { Footer } from '../components/ui/Footer';
+import GlobalStyle from '../components/ui/GlobalStyle';
+import { Header } from '../components/ui/Header';
+import Panel from '../components/ui/Panel';
+import Paragraph from '../components/ui/Paragraph';
 import coffeeIcon from '../assets/icons/buymeacoffee.svg';
-import feedbackIcon from '../assets/icons/sendmail.svg';
+import feedbackIcon from '../assets/icons/github.svg';
 
 interface ContactProps {}
 
@@ -28,7 +28,7 @@ export const Contact: React.FC<ContactProps> = () => {
 				<Button
 					color="secondary"
 					style={{
-						margin: '0 40px',
+						margin: '0 30px',
 						display: 'flex',
 						flexDirection: 'row',
 						justifyContent: 'center',
@@ -36,26 +36,26 @@ export const Contact: React.FC<ContactProps> = () => {
 					}}
 				>
 					<img src={coffeeIcon} alt="icon" style={{ height: '1.5rem' }} />
-					<span style={{ paddingLeft: '5px' }}>Buy me a coffee</span>
+					<span style={{ paddingLeft: '10px' }}>Buy me a coffee</span>
 				</Button>
 
 				<br />
 				<Paragraph>
-					This project is a community effort. If you have ideas on how it can
-					improve, please send them my way!
+					This project was build with React and Node and is completely open
+					source!
 				</Paragraph>
 				<Button
 					color="secondary"
 					style={{
-						margin: '0 40px',
+						margin: '0 30px',
 						display: 'flex',
 						flexDirection: 'row',
-						justifyContent: 'center',
+						justifyContent: 'start',
 						alignItems: 'center',
 					}}
 				>
 					<img src={feedbackIcon} alt="icon" style={{ height: '1.5rem' }} />
-					<span style={{ paddingLeft: '5px' }}>Send feedback</span>
+					<span style={{ paddingLeft: '10px' }}>GitHub Repo</span>
 				</Button>
 			</Panel>
 			<Footer />

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from '../components/Button';
-import { Footer } from '../components/Footer';
-import GlobalStyle from '../components/GlobalStyle';
-import { Header } from '../components/Header';
-import Wrapper from '../components/Wrapper';
+import Button from '../components/ui/Button';
+import { Footer } from '../components/ui/Footer';
+import GlobalStyle from '../components/ui/GlobalStyle';
+import { Header } from '../components/ui/Header';
+import Wrapper from '../components/ui/Wrapper';
 import spy from '../assets/pieces/w1忍.svg';
 
 const TextStyle = styled.div`

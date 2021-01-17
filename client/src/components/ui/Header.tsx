@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import spy from '../assets/pieces/w1忍.svg';
+import spy from '../../assets/pieces/w1忍.svg';
 
 interface HeaderProps {
 	home: boolean;
@@ -18,6 +18,10 @@ const HeaderWrapper = styled.header`
 	top: 0;
 	width: 100%;
 	z-index: 2;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
 `;
 
 const NavigationWrapper = styled.nav<{ home: boolean }>`
@@ -51,7 +55,12 @@ export const Header: React.FC<HeaderProps> = (props) => {
 	return (
 		<HeaderWrapper>
 			<Link to="/">
-				<img src={spy} alt="spy" style={{ width: '36px', marginLeft: '3em' }} />
+				<img
+					src={spy}
+					draggable={false}
+					alt="spy"
+					style={{ width: '36px', marginLeft: '3em' }}
+				/>
 			</Link>
 			<NavigationWrapper home={props.home}>
 				<NavItem to="/login">Play</NavItem>

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Footer } from '../components/Footer';
-import GlobalStyle from '../components/GlobalStyle';
-import { Header } from '../components/Header';
-import GameButton from '../components/GameButton';
-import WrapperSpaceBetween from '../components/WrapperSpaceBetween';
-import { TurnIndictor } from '../components/TurnIndictor';
+import { Footer } from '../components/ui/Footer';
+import GlobalStyle from '../components/ui/GlobalStyle';
+import { Header } from '../components/ui/Header';
+import GameButton from '../components/ui/GameButton';
+import WrapperSpaceBetween from '../components/ui/WrapperSpaceBetween';
+import { TurnIndictor } from '../components/ui/TurnIndictor';
 import { RouteComponentProps } from 'react-router-dom';
-import { StockpilePanel } from '../components/StockpilePanel';
-import { TowerDetails } from '../components/TowerDetails';
+import { StockpilePanel } from '../components/ui/StockpilePanel';
+import { TowerDetails } from '../components/ui/TowerDetails';
 
 // TODO: remove dependency, the below is for ui testing purposes only (instead store game on server and fetch state by api call after each turn)
 import * as Gungi from 'gungi.js';
@@ -38,10 +38,23 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 						justifyContent: 'space-between',
 						height: '100%',
 						marginLeft: '8em',
+						userSelect: 'none',
 					}}
 				>
-					<div style={{ width: '100%' }}>
-						<img src={boardIcon} alt="board" style={{ maxWidth: '100%' }} />
+					<div
+						style={{
+							width: '92.5%',
+							height: '0',
+							backgroundImage: `url(${boardIcon})`,
+							backgroundRepeat: 'no-repeat',
+							backgroundSize: '100%',
+							display: 'block',
+							paddingBottom: '96.2vh',
+							position: 'relative',
+							userSelect: 'none',
+						}}
+					>
+						<Board />
 					</div>
 
 					<div
@@ -49,7 +62,7 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',
-							justifyContent: 'center',
+							justifyContent: '',
 							margin: '0 3em',
 							width: '80%',
 							flexWrap: 'wrap',
@@ -169,10 +182,6 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 							playerName="player 2"
 							playerStockPile={gungi.stockpile(gungi.WHITE)}
 						/>
-
-						<div>
-							<Board></Board>
-						</div>
 					</div>
 				</div>
 			</div>

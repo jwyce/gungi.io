@@ -1,12 +1,12 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import Button from '../components/Button';
-import { Footer } from '../components/Footer';
-import GlobalStyle from '../components/GlobalStyle';
-import { Header } from '../components/Header';
-import { HeroParticles } from '../components/HeroParticles';
-import Wrapper from '../components/Wrapper';
-import Input from '../components/Input';
+import Button from '../components/ui/Button';
+import { Footer } from '../components/ui/Footer';
+import GlobalStyle from '../components/ui/GlobalStyle';
+import { Header } from '../components/ui/Header';
+import { HeroParticles } from '../components/ui/HeroParticles';
+import Wrapper from '../components/ui/Wrapper';
+import Input from '../components/ui/Input';
 import accountIcon from '../assets/icons/account_circle.svg';
 
 interface LoginProps extends RouteComponentProps {}

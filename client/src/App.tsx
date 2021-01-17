@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Flower } from './components/Flower'; // TODO: remove
+import { Flower } from './components/ui/Flower'; // TODO: remove
 import { Home } from './modules/Home';
 import { About } from './modules/About';
 import { Game } from './modules/Game';

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Footer } from '../components/Footer';
-import GlobalStyle from '../components/GlobalStyle';
-import { Header } from '../components/Header';
-import Paragraph from '../components/Paragraph';
-import Panel from '../components/Panel';
-import { Mobility } from '../components/Mobility';
+import { Footer } from '../components/ui/Footer';
+import GlobalStyle from '../components/ui/GlobalStyle';
+import { Header } from '../components/ui/Header';
+import Paragraph from '../components/ui/Paragraph';
+import Panel from '../components/ui/Panel';
+import { Mobility } from '../components/ui/Mobility';
 import styled from 'styled-components';
 
 const LinkStyle = styled.a`
@@ -67,8 +67,8 @@ export const About: React.FC<AboutProps> = () => {
 				</div>
 
 				<Paragraph>
-					There are 13 different types of pieces with various ranges of mobility
-					at different tiers. <br />
+					There are 13 unique types of pieces with various ranges of mobility at
+					different tiers. <br />
 					<span style={{ fontSize: 'small' }}>
 						<strong>Note:</strong> Blue means the piece can move into that
 						square. Green symbolizes the ability of that piece to move in a
@@ -256,7 +256,7 @@ export const About: React.FC<AboutProps> = () => {
 								<li style={{ margin: '0 0 10px 0' }}>
 									Move – choose one piece to move (see section above on how
 									pieces move); remember that towers themselves do not move,
-									they only increase range of mobilityof the top piece
+									they only increase range of mobility of the top piece
 								</li>
 								<li style={{ margin: '0 0 10px 0' }}>
 									Attack – if an enemy piece occupies a square within your range
@@ -267,7 +267,7 @@ export const About: React.FC<AboutProps> = () => {
 								<li style={{ margin: '0 0 10px 0' }}>
 									Stack – if either a friendly piece or an enemy piece is within
 									your range of movement, you can stack on top of that piece to
-									form a tower(the top piece of the tower controls the tower
+									form a tower (the top piece of the tower controls the tower
 									regardless of pieces of a different team below it)
 								</li>
 								<li style={{ margin: '0 0 10px 0' }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import blackMarshall from '../assets/pieces/b1帥.svg';
-import whiteMarshall from '../assets/pieces/w1帥.svg';
+import blackMarshall from '../../assets/pieces/b1帥.svg';
+import whiteMarshall from '../../assets/pieces/w1帥.svg';
 
 interface TurnIndictorProps {
 	player: string;

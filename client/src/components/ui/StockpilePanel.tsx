@@ -1,6 +1,7 @@
 import React from 'react';
 import { Badge, Icon, makeStyles } from '@material-ui/core';
-import Panel from '../components/Panel';
+import Panel from './Panel';
+import styled from 'styled-components';
 
 function importAll(r) {
 	let images = {};
@@ -10,8 +11,19 @@ function importAll(r) {
 	return images;
 }
 
-const pieces = importAll(require.context('../assets/pieces', false, /.svg/));
+const pieces = importAll(require.context('../../assets/pieces', false, /.svg/));
 
+const PieceIcon = styled.img`
+	cursor: grab;
+	&:active {
+		cursor: grabbing;
+	}
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+	width: 48px;
+`;
 interface Piece {
 	type: string;
 	color: string;
@@ -64,12 +76,12 @@ export const StockpilePanel: React.FC<StockpilePanelProps> = (props) => {
 					className={classes.margin}
 				>
 					<Icon style={{ fontSize: '48px' }}>
-						<img
+						<PieceIcon
 							src={
 								pieces[`${props.player}1${stock_piece.piece.type}.svg`].default
 							}
+							draggable={false}
 							alt={`${props.player}1${stock_piece.piece.type}`}
-							style={{ width: '48px' }}
 						/>
 					</Icon>
 				</Badge>
