@@ -21,7 +21,7 @@ export default styled.button<{
 	transition: filter 0.2s, opacity 0.6s, transform 0.6s, color 0.4s,
 		background-color 0.4s, -webkit-filter 0.2s;
 	font-weight: 700;
-	margin: 10px;
+	margin: 0 10px;
 	font-size: 1.5rem;
 	font-family: Montserrat, sans-serif;
 	line-height: 1.4;

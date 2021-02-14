@@ -9,7 +9,7 @@ export const TowerDetails: React.FC<TowerDetailsProps> = () => {
 			color="secondary"
 			style={{
 				padding: '1em 1em 6em 1em',
-				width: '95%',
+				width: '75%',
 				margin: 'auto',
 			}}
 		>

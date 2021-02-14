@@ -1,20 +1,18 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Flower } from './components/ui/Flower'; // TODO: remove
-import { Home } from './modules/Home';
-import { About } from './modules/About';
-import { Game } from './modules/Game';
-import { Contact } from './modules/Contact';
-import { Login } from './modules/Login';
-import { Lobby } from './modules/Lobby';
-import { NotFound } from './modules/NotFound';
+import { Home } from './pages/Home';
+import { About } from './pages/About';
+import { Game } from './pages/Game';
+import { Contact } from './pages/Contact';
+import { Login } from './pages/Login';
+import { Lobby } from './pages/Lobby';
+import { NotFound } from './pages/NotFound';
 
 const App: React.FC = () => {
 	return (
 		<BrowserRouter>
 			<Switch>
 				<Route path="/" exact component={Home} />
-				<Route path="/flower" exact component={Flower} />
 				<Route path="/about" exact component={About} />
 				<Route path="/contact" exact component={Contact} />
 				<Route path="/login" exact component={Login} />

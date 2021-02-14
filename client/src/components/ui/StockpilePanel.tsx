@@ -3,9 +3,9 @@ import { Badge, Icon, makeStyles } from '@material-ui/core';
 import Panel from './Panel';
 import styled from 'styled-components';
 
-function importAll(r) {
+function importAll(r: any) {
 	let images = {};
-	r.keys().forEach((item, index) => {
+	r.keys().forEach((item: string, index: any) => {
 		images[item.replace('./', '')] = r(item);
 	});
 	return images;
@@ -60,7 +60,7 @@ export const StockpilePanel: React.FC<StockpilePanelProps> = (props) => {
 			color="secondary"
 			style={{
 				padding: '1em',
-				width: '95%',
+				width: '75%',
 				margin: 'auto',
 			}}
 		>

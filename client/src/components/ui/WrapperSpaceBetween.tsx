@@ -5,7 +5,7 @@ export default styled.section`
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	width: 100%;
+	width: 80%;
 	margin: 0.5em 0;
 	flex-wrap: wrap;
 	user-select: none;

@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const ContentStyle = styled.section`
@@ -15,9 +16,9 @@ const TitleStyle = styled.div`
 	align-items: center;
 `;
 
-function importAll(r) {
+function importAll(r: any) {
 	let images = {};
-	r.keys().forEach((item, index) => {
+	r.keys().forEach((item: string, index: any) => {
 		images[item.replace('./', '')] = r(item);
 	});
 	return images;
