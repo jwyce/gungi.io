@@ -1,10 +1,10 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { HeroParticles } from '../components/ui/HeroParticles';
-import Button from '../components/ui/Button';
-import GlobalStyle from '../components/ui/GlobalStyle';
+import { HeroParticles } from '../components/ui/styles/HeroParticles';
+import Button from '../components/ui/styles/Button';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Footer } from '../components/ui/Footer';
-import Wrapper from '../components/ui/Wrapper';
+import Wrapper from '../components/ui/styles/Wrapper';
 import { Header } from '../components/ui/Header';
 
 interface HomeProps extends RouteComponentProps {}

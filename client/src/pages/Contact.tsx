@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '../components/ui/Button';
+import Button from '../components/ui/styles/Button';
 import { Footer } from '../components/ui/Footer';
-import GlobalStyle from '../components/ui/GlobalStyle';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Header } from '../components/ui/Header';
-import Panel from '../components/ui/Panel';
-import Paragraph from '../components/ui/Paragraph';
+import Panel from '../components/ui/styles/Panel';
+import Paragraph from '../components/ui/styles/Paragraph';
 import coffeeIcon from '../assets/icons/buymeacoffee.svg';
 import gitIcon from '../assets/icons/github.svg';
 import feedbackIcon from '../assets/icons/feedback.svg';

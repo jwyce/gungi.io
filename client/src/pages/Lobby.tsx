@@ -1,10 +1,10 @@
 import React from 'react';
 import { Footer } from '../components/ui/Footer';
-import GlobalStyle from '../components/ui/GlobalStyle';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Header } from '../components/ui/Header';
-import Panel from '../components/ui/Panel';
-import Paragraph from '../components/ui/Paragraph';
-import LobbyButton from '../components/ui/LobbyButton';
+import Panel from '../components/ui/styles/Panel';
+import Paragraph from '../components/ui/styles/Paragraph';
+import LobbyButton from '../components/ui/styles/LobbyButton';
 import { RouteComponentProps } from 'react-router-dom';
 import accountIcon from '../assets/icons/account_circle.svg';
 

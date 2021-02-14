@@ -5,15 +5,15 @@ import { RouteComponentProps } from 'react-router-dom';
 import boardIcon from '../assets/gungiboard.svg';
 import { Board } from '../components/gameboard/Board';
 import { Footer } from '../components/ui/Footer';
-import GameButton from '../components/ui/GameButton';
-import GlobalStyle from '../components/ui/GlobalStyle';
+import GameButton from '../components/ui/styles/GameButton';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Header } from '../components/ui/Header';
-import LobbyButton from '../components/ui/LobbyButton';
+import LobbyButton from '../components/ui/styles/LobbyButton';
 import { StockpilePanel } from '../components/ui/StockpilePanel';
 import { TowerDetails } from '../components/ui/TowerDetails';
 import { TurnIndictor } from '../components/ui/TurnIndictor';
-import { LoadingContainer } from '../components/ui/LoadingContainer';
-import WrapperSpaceBetween from '../components/ui/WrapperSpaceBetween';
+import { LoadingContainer } from '../components/ui/styles/LoadingContainer';
+import WrapperSpaceBetween from '../components/ui/styles/WrapperSpaceBetween';
 
 interface GameProps extends RouteComponentProps {}
 
@@ -169,7 +169,13 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 										LOBBY
 									</LobbyButton>
 
-									<LobbyButton>FORFEIT</LobbyButton>
+									<LobbyButton
+										onClick={() => {
+											window.confirm('test?');
+										}}
+									>
+										FORFEIT
+									</LobbyButton>
 								</div>
 							</WrapperSpaceBetween>
 

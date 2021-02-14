@@ -13,6 +13,7 @@ const Wrapper = styled.div<{ highlight: boolean; hover: boolean }>`
 	position: relative;
 	outline: ${(props) => (props.hover ? '5px solid #b683ca' : 'none')};
 	outline-offset: ${(props) => (props.hover ? '-4.5px' : '0')};
+	cursor: ${(props) => (props.hover ? '-webkit-grabbing' : '0')};
 `;
 
 const Hint = styled.div<{ show: boolean; capture: boolean }>`

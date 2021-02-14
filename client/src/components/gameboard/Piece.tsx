@@ -22,112 +22,128 @@ function importAll(r: any) {
 const pieces = importAll(require.context('../../assets/pieces', false, /.svg/));
 const position = { x: 0, y: 0 };
 
-interface PieceProps {}
+interface PieceProps {
+	icon: string;
+	variant?: 'normal' | 'small';
+	belowIcon?: string;
+}
 
-export const Piece: React.FC<PieceProps> = observer(() => {
-	const [state, setState] = useState({
-		isDragging: false,
-		origin: position,
-		translation: position,
-	});
-	const gungiStore = useContext(GungiStoreContext);
-
-	const pieceEl = useRef<HTMLImageElement>(null);
-
-	const handleMouseDown = useCallback(
-		({ button, clientX, clientY }) => {
-			if (button === 2) {
-				return;
-			}
-
-			const rect = pieceEl.current!.getBoundingClientRect();
-			const translation = {
-				x: clientX - rect.x + 10 - rect.width / 2,
-				y: clientY - rect.y - rect.height / 2,
-			};
-
-			setState((state) => ({
-				...state,
-				isDragging: true,
-				origin: {
-					x: rect.x - 10 + rect.width / 2,
-					y: rect.y + rect.height / 2,
-				},
-				translation,
-			}));
-
-			gungiStore.isDragging = true;
-		},
-		[gungiStore]
-	);
-
-	const handleMouseMove = useCallback(
-		({ clientX, clientY }) => {
-			const translation = {
-				x: clientX - state.origin.x,
-				y: clientY - state.origin.y,
-			};
-
-			setState((state) => ({
-				...state,
-				translation,
-			}));
-		},
-		[state.origin]
-	);
-
-	const handleMouseUp = useCallback(() => {
-		setState((state) => ({
-			...state,
+export const Piece: React.FC<PieceProps> = observer(
+	({ icon, variant = 'normal', belowIcon }) => {
+		const [state, setState] = useState({
 			isDragging: false,
-		}));
+			origin: position,
+			translation: position,
+		});
+		const gungiStore = useContext(GungiStoreContext);
 
-		gungiStore.isDragging = false;
-	}, [gungiStore]);
+		const pieceEl = useRef<HTMLImageElement>(null);
 
-	useEffect(() => {
-		if (state.isDragging) {
-			window.addEventListener('mousemove', handleMouseMove);
-			window.addEventListener('mouseup', handleMouseUp);
-			window.addEventListener('touchmove', handleMouseMove);
-			window.addEventListener('touchend', handleMouseUp);
-		} else {
-			window.removeEventListener('mousemove', handleMouseMove);
-			window.removeEventListener('mouseup', handleMouseUp);
-			window.removeEventListener('touchmove', handleMouseMove);
-			window.removeEventListener('touchend', handleMouseUp);
+		const handleMouseDown = useCallback(
+			({ button, clientX, clientY }) => {
+				if (button === 2) {
+					return;
+				}
 
-			setState((state) => ({ ...state, translation: { x: 0, y: 0 } }));
-		}
-	}, [state.isDragging, handleMouseMove, handleMouseUp]);
+				const rect = pieceEl.current!.getBoundingClientRect();
+				const offset = variant === 'normal' ? 10 : 0;
+				const translation = {
+					x: clientX - rect.x + offset - rect.width / 2,
+					y: clientY - rect.y - rect.height / 2,
+				};
 
-	const styles: DetailedHTMLProps<
-		ImgHTMLAttributes<HTMLImageElement>,
-		HTMLImageElement
-	> = useMemo(
-		() => ({
-			cursor: state.isDragging ? '-webkit-grabbing' : '-webkit-grab',
-			transform: `translate(${state.translation.x}px, ${state.translation.y}px)`,
-			zIndex: state.isDragging ? 900 : 4,
-			position: state.isDragging ? 'absolute' : 'relative',
-			pointerEvents: state.isDragging ? 'none' : '',
-			width: '80%',
-			display: 'block',
-			margin: '10.02% auto',
-		}),
-		[state.isDragging, state.translation]
-	);
+				setState((state) => ({
+					...state,
+					isDragging: true,
+					origin: {
+						x: rect.x - offset + rect.width / 2,
+						y: rect.y + rect.height / 2,
+					},
+					translation,
+				}));
 
-	return (
-		<>
-			<img
-				src={pieces['b2帥.svg'].default}
-				alt="piece"
-				draggable={false}
-				ref={pieceEl}
-				onMouseDown={handleMouseDown}
-				style={styles}
-			/>
-		</>
-	);
-});
+				gungiStore.isDragging = true;
+			},
+			[gungiStore, variant]
+		);
+
+		const handleMouseMove = useCallback(
+			({ clientX, clientY }) => {
+				const translation = {
+					x: clientX - state.origin.x,
+					y: clientY - state.origin.y,
+				};
+
+				setState((state) => ({
+					...state,
+					translation,
+				}));
+			},
+			[state.origin]
+		);
+
+		const handleMouseUp = useCallback(() => {
+			setState((state) => ({
+				...state,
+				isDragging: false,
+			}));
+
+			gungiStore.isDragging = false;
+		}, [gungiStore]);
+
+		useEffect(() => {
+			if (state.isDragging) {
+				window.addEventListener('mousemove', handleMouseMove);
+				window.addEventListener('mouseup', handleMouseUp);
+			} else {
+				window.removeEventListener('mousemove', handleMouseMove);
+				window.removeEventListener('mouseup', handleMouseUp);
+
+				setState((state) => ({ ...state, translation: { x: 0, y: 0 } }));
+			}
+		}, [state.isDragging, handleMouseMove, handleMouseUp]);
+
+		const styles: DetailedHTMLProps<
+			ImgHTMLAttributes<HTMLImageElement>,
+			HTMLImageElement
+		> = useMemo(
+			() => ({
+				cursor: state.isDragging ? '-webkit-grabbing' : '-webkit-grab',
+				transform: `translate(${state.translation.x}px, ${state.translation.y}px)`,
+				zIndex: state.isDragging ? 900 : 4,
+				position: state.isDragging ? 'absolute' : 'relative',
+				pointerEvents: state.isDragging ? 'none' : '',
+				width: variant === 'normal' ? '80%' : '48px',
+				display: 'block',
+				margin: variant === 'normal' ? '10.02% auto' : '0',
+			}),
+			[state.isDragging, state.translation, variant]
+		);
+
+		return (
+			<>
+				<img
+					src={pieces[icon].default}
+					alt="piece"
+					draggable={false}
+					ref={pieceEl}
+					onMouseDown={handleMouseDown}
+					style={styles}
+				/>
+				{belowIcon && (
+					<img
+						src={pieces[belowIcon].default}
+						alt="piece_below"
+						draggable={false}
+						style={{
+							width: '80%',
+							display:
+								variant === 'normal' && state.isDragging ? 'block' : 'none',
+							margin: variant === 'normal' ? '10.02% auto' : '0',
+						}}
+					/>
+				)}
+			</>
+		);
+	}
+);

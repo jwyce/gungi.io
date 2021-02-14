@@ -1,9 +1,9 @@
 import React from 'react';
 import { Footer } from '../components/ui/Footer';
-import GlobalStyle from '../components/ui/GlobalStyle';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Header } from '../components/ui/Header';
-import Paragraph from '../components/ui/Paragraph';
-import Panel from '../components/ui/Panel';
+import Paragraph from '../components/ui/styles/Paragraph';
+import Panel from '../components/ui/styles/Panel';
 import { Mobility } from '../components/ui/Mobility';
 import styled from 'styled-components';
 
