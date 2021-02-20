@@ -7,6 +7,25 @@ const io = require('socket.io')(http);
 const { Gungi } = require('gungi.js');
 const gungi = new Gungi();
 
+gungi.move(gungi.moves()[0]);
+gungi.move(gungi.moves()[0]);
+gungi.move({ src: null, dst: null, type: gungi.READY });
+gungi.move({
+	src: { type: gungi.PAWN, color: gungi.WHITE },
+	dst: '1-5',
+	type: gungi.PLACE,
+});
+gungi.move({
+	src: { type: gungi.MUSKETEER, color: gungi.WHITE },
+	dst: '1-5',
+	type: gungi.PLACE,
+});
+gungi.move({
+	src: { type: gungi.ARCHER, color: gungi.WHITE },
+	dst: '1-5',
+	type: gungi.PLACE,
+});
+gungi.move({ src: null, dst: null, type: gungi.READY });
 console.log(gungi.ascii());
 
 //TODO: limit number of active games per user to 5
@@ -17,7 +36,6 @@ app.get('/', (_req, res) => {
 
 app.get('/init_game', (_req, res) => {
 	res.json({
-		board: gungi.board(),
 		stockpile_black: gungi.stockpile(gungi.BLACK),
 		stockpile_white: gungi.stockpile(gungi.WHITE),
 		legal_moves: gungi.moves(),
@@ -27,6 +45,7 @@ app.get('/init_game', (_req, res) => {
 		in_checkmate: gungi.in_checkmate(),
 		in_stalemate: gungi.in_stalemate(),
 		game_over: gungi.game_over(),
+		board: gungi.board(),
 	});
 });
 

@@ -1,3 +1,4 @@
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, {
 	DetailedHTMLProps,
@@ -25,11 +26,13 @@ const position = { x: 0, y: 0 };
 interface PieceProps {
 	icon: string;
 	variant?: 'normal' | 'small';
-	belowIcon?: string;
+	belowIcon?: string | undefined;
+	squareId?: string;
+	stockId?: string;
 }
 
 export const Piece: React.FC<PieceProps> = observer(
-	({ icon, variant = 'normal', belowIcon }) => {
+	({ icon, variant = 'normal', belowIcon, squareId, stockId }) => {
 		const [state, setState] = useState({
 			isDragging: false,
 			origin: position,
@@ -63,8 +66,40 @@ export const Piece: React.FC<PieceProps> = observer(
 				}));
 
 				gungiStore.isDragging = true;
+				gungiStore.currentSelected = squareId ?? stockId;
+				if (gungiStore.currentSelected === squareId && squareId !== undefined) {
+					const pos = squareId.split('-');
+					const rank = parseInt(pos[0]);
+					const file = parseInt(pos[1]);
+
+					console.log('id', 10 - rank, 10 - file);
+					console.log('boardPos', rank - 1, 9 - file);
+					console.log(toJS(gungiStore.gameState?.board[rank - 1][9 - file]));
+					gungiStore.squareSelected = { rank, file };
+					gungiStore.hints = gungiStore.gameState?.legal_moves
+						.filter(
+							(x) =>
+								x.src !== null &&
+								x.src === `${10 - rank}-${10 - file}` &&
+								x.type !== 'place' &&
+								x.type !== 'ready'
+						)
+						.map((x) => {
+							if (x.dst === null) {
+								return null;
+							}
+							const hint = x.dst.split('-');
+							const hintRank = parseInt(hint[0]);
+							const hintFile = parseInt(hint[1]);
+							return `${10 - hintRank}-${10 - hintFile}`;
+						});
+					console.log(toJS(gungiStore.hints));
+				} else {
+					gungiStore.squareSelected = undefined;
+					gungiStore.hints = undefined;
+				}
 			},
-			[gungiStore, variant]
+			[gungiStore, variant, squareId, stockId]
 		);
 
 		const handleMouseMove = useCallback(

@@ -36,9 +36,9 @@ const Hint = styled.div<{ show: boolean; capture: boolean }>`
 
 interface SquareProps {
 	children: React.ReactNode;
-	highlight: boolean;
 	hasPiece: boolean;
 	hint: boolean;
+	id: string;
 }
 
 export const Square: React.FC<SquareProps> = observer((props) => {
@@ -47,8 +47,15 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 
 	return (
 		<Wrapper
-			highlight={props.highlight}
+			highlight={gungiStore.currentSelected === props.id}
 			hover={isOver}
+			onClick={() => {
+				if (!props.hasPiece) {
+					gungiStore.currentSelected = undefined;
+					gungiStore.squareSelected = undefined;
+					gungiStore.hints = undefined;
+				}
+			}}
 			onMouseOver={() => {
 				setIsOver(gungiStore.isDragging);
 			}}
@@ -60,7 +67,14 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 			}}
 		>
 			{props.children}
-			<Hint show={props.hint} capture={props.hasPiece} />
+			<Hint
+				show={
+					gungiStore.hints === undefined
+						? false
+						: gungiStore.hints?.includes(props.id)
+				}
+				capture={props.hasPiece}
+			/>
 		</Wrapper>
 	);
 });

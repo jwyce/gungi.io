@@ -1,13 +1,18 @@
 import React from 'react';
 import spy from '../../assets/pieces/w1忍.svg';
 
-export const Empty: React.FC<{}> = () => {
+interface EmptyProps {
+	squareId: string;
+}
+
+export const Empty: React.FC<EmptyProps> = ({ squareId }) => {
 	return (
 		<>
 			<img
 				src={spy}
 				alt="piece"
 				draggable={false}
+				onClick={() => {}}
 				style={{
 					zIndex: 4,
 					opacity: 0,
@@ -15,6 +20,7 @@ export const Empty: React.FC<{}> = () => {
 					width: '80%',
 					display: 'block',
 					margin: '10.02% auto',
+					pointerEvents: 'none',
 				}}
 			/>
 		</>

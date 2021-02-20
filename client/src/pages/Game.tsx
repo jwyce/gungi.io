@@ -1,58 +1,52 @@
-import React, { useEffect, useState } from 'react';
+// import { autorun, toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useState } from 'react';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { RouteComponentProps } from 'react-router-dom';
+import { GungiStoreContext } from 'src/stores/GungiStore';
 
 import boardIcon from '../assets/gungiboard.svg';
 import { Board } from '../components/gameboard/Board';
 import { Footer } from '../components/ui/Footer';
+import { Header } from '../components/ui/Header';
+import { StockpilePanel } from '../components/ui/StockpilePanel';
 import GameButton from '../components/ui/styles/GameButton';
 import GlobalStyle from '../components/ui/styles/GlobalStyle';
-import { Header } from '../components/ui/Header';
+import { LoadingContainer } from '../components/ui/styles/LoadingContainer';
 import LobbyButton from '../components/ui/styles/LobbyButton';
-import { StockpilePanel } from '../components/ui/StockpilePanel';
+import WrapperSpaceBetween from '../components/ui/styles/WrapperSpaceBetween';
 import { TowerDetails } from '../components/ui/TowerDetails';
 import { TurnIndictor } from '../components/ui/TurnIndictor';
-import { LoadingContainer } from '../components/ui/styles/LoadingContainer';
-import WrapperSpaceBetween from '../components/ui/styles/WrapperSpaceBetween';
 
 interface GameProps extends RouteComponentProps {}
 
-export const Game: React.FC<GameProps> = ({ history }) => {
+export const Game: React.FC<GameProps> = observer(({ history }) => {
 	document.title = 'Game | Gungi.io';
 
 	const [moveTypeSelected, setMoveTypeSelected] = useState(() => {
 		return 'PLACE';
 	});
 
-	interface Gamestate {
-		board: any;
-		stockpile_black: any;
-		stockpile_white: any;
-		legal_moves: any;
-		phase: string;
-		turn: string;
-		in_check: boolean;
-		in_checkmate: boolean;
-		in_stalemate: boolean;
-		game_over: boolean;
-	}
-
-	const [gamestate, setGamestate] = useState<Gamestate | null>(null);
+	const gungiStore = useContext(GungiStoreContext);
 
 	useEffect(() => {
-		fetch('/init_game')
-			.then((response) => response.json())
-			.then((data) => {
-				setGamestate(data);
-			});
-	}, []);
+		gungiStore.fetchGame();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []); // empty array needed here
+
+	// autorun(() => {
+	// 	console.log('hi', toJS(gungiStore.gameState));
+	// });
+	// autorun(() => {
+	// 	console.log('finsihed', gungiStore.state);
+	// });
 
 	return (
 		<>
 			<GlobalStyle />
 			<Header home={false} />
 
-			{gamestate !== null ? (
+			{gungiStore.state === 'done' && gungiStore.gameState !== undefined ? (
 				<div style={{ minHeight: '100%', margin: '1.1rem 0' }}>
 					<div
 						style={{
@@ -79,7 +73,7 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 								position: 'relative',
 							}}
 						>
-							<Board />
+							<Board board={gungiStore.gameState.board} />
 						</div>
 
 						<div
@@ -105,7 +99,7 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 									PLACE
 								</GameButton>
 
-								{gamestate?.phase === 'game' ? (
+								{gungiStore.gameState?.phase === 'game' ? (
 									<>
 										<GameButton
 											backgroundColor="#3C85F5"
@@ -157,7 +151,9 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 										fontWeight: 'bolder',
 									}}
 								>
-									{gamestate?.phase === 'game' ? 'Game Phase' : 'Draft Phase'}
+									{gungiStore.gameState?.phase === 'game'
+										? 'Game Phase'
+										: 'Draft Phase'}
 								</div>
 
 								<div>
@@ -182,12 +178,12 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 							<WrapperSpaceBetween>
 								<TurnIndictor
 									player="b"
-									isTurn={'b' === gamestate?.turn}
+									isTurn={'b' === gungiStore.gameState?.turn}
 									playerName="player 1"
 								/>
 								<TurnIndictor
 									player="w"
-									isTurn={'w' === gamestate?.turn}
+									isTurn={'w' === gungiStore.gameState?.turn}
 									playerName="player 2"
 								/>
 							</WrapperSpaceBetween>
@@ -197,14 +193,14 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 							<StockpilePanel
 								player="b"
 								playerName="player 1"
-								playerStockPile={gamestate?.stockpile_black}
+								playerStockPile={gungiStore.gameState?.stockpile_black}
 							/>
 
 							<br />
 							<StockpilePanel
 								player="w"
 								playerName="player 2"
-								playerStockPile={gamestate?.stockpile_white}
+								playerStockPile={gungiStore.gameState?.stockpile_white}
 							/>
 						</div>
 					</div>
@@ -220,4 +216,4 @@ export const Game: React.FC<GameProps> = ({ history }) => {
 			<Footer />
 		</>
 	);
-};
+});

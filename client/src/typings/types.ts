@@ -3,6 +3,11 @@ export type Piece = {
 	color: string;
 };
 
+export type Square = {
+	rank: number;
+	file: number;
+};
+
 export type Move = {
 	src: Piece | string | null;
 	dst: string | null;
