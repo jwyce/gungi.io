@@ -19,6 +19,11 @@ export type StockPiece = {
 	amount: number;
 };
 
+export type User = {
+	id: string;
+	username: string;
+};
+
 export type GameState = {
 	board: (Piece | null)[][][];
 	stockpile_black: StockPiece[];
