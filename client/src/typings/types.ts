@@ -20,8 +20,10 @@ export type StockPiece = {
 };
 
 export type User = {
-	id: string;
+	userID: string;
 	username: string;
+	self: boolean;
+	connected: boolean;
 };
 
 export type GameState = {

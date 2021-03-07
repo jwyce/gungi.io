@@ -1,40 +1,107 @@
-import express from 'express';
 import cors from 'cors';
-import { getOnlineUsers, userJoin, userLeave } from './utils/users';
+import express from 'express';
+import { v4 } from 'uuid';
 
+import { Session, InMemorySessionStore } from './sessionStore';
+
+const sessionStore = new InMemorySessionStore();
 const PORT = process.env.HTTP_PORT || 4001;
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+	cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
+});
 
 const { Gungi } = require('gungi.js');
 const gungi = new Gungi();
 console.log(gungi.ascii());
 
-//TODO: limit number of active games per user to 5
+//TODO: user can only have 1 active game
 
 const main = async () => {
-	io.on('connection', function (socket: any) {
-		console.log('a user connected', socket.id);
-		socket.on('joinLobby', (username: string) => {
-			userJoin(socket.id, username);
-			socket.join('lobby');
-			io.to('lobby').emit('onlineUsers', getOnlineUsers());
+	io.use((socket: any, next: any) => {
+		const sessionID = socket.handshake.auth.sessionID as string;
+		if (sessionID) {
+			// find existing session
+			const session = sessionStore.findSession(sessionID);
+			console.log('found session: ', session);
+			if (session) {
+				socket.sessionID = sessionID;
+				socket.userID = session.userID;
+				socket.username = session.username;
+				return next();
+			}
+		}
+		const username = socket.handshake.auth.username;
+		if (!username) {
+			return next(new Error('invalid username'));
+		}
+		// create new session
+		socket.sessionID = v4();
+		socket.userID = v4();
+		socket.username = username;
+		next();
+	});
+
+	io.on('connection', (socket: any) => {
+		console.log('a user connected', socket.sessionID);
+		socket.on('disconnect', () => {
+			console.log('user disconnected', socket.sessionID);
 		});
 
-		socket.on('disconnect', () => {
-			const user = userLeave(socket.id);
+		// persist session
+		sessionStore.saveSession(socket.sessionID, {
+			userID: socket.userID,
+			username: socket.username,
+			connected: true,
+		});
 
-			if (user) {
-				// Send users and room info
-				io.to('lobby').emit('onlineUsers', getOnlineUsers());
+		console.log(JSON.stringify(sessionStore.findAllSessions()));
+
+		// emit session details
+		socket.emit('session', {
+			sessionID: socket.sessionID,
+			userID: socket.userID,
+		});
+
+		// fetch existing users
+		const users: Session[] = [];
+		sessionStore.findAllSessions().forEach((session) => {
+			users.push({
+				userID: session.userID,
+				username: session.username,
+				connected: session.connected,
+			});
+		});
+		socket.emit('users', users);
+
+		// notify existing users
+		socket.broadcast.emit('user connected', {
+			userID: socket.userID,
+			username: socket.username,
+			connected: true,
+		});
+
+		// notify users upon disconnection
+		socket.on('disconnect', async () => {
+			const matchingSockets = await io.in(socket.userID).allSockets();
+			const isDisconnected = matchingSockets.size === 0;
+			if (isDisconnected) {
+				// notify other users
+				socket.broadcast.emit('user disconnected', socket.userID);
+				// update the connection status of the session
+				sessionStore.saveSession(socket.sessionID, {
+					userID: socket.userID,
+					username: socket.username,
+					connected: false,
+				});
 			}
 		});
 	});
 
 	app.use(
 		cors({
-			origin: 'http://172.18.238.246:3000',
+			origin: 'http://localhost:3000',
 		})
 	);
 
