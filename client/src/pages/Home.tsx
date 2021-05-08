@@ -6,6 +6,8 @@ import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Footer } from '../components/ui/Footer';
 import Wrapper from '../components/ui/styles/Wrapper';
 import { Header } from '../components/ui/Header';
+import Title from '../components/ui/styles/Title';
+import Subtitle from '../components/ui/styles/Subtitle';
 
 interface HomeProps extends RouteComponentProps {}
 
@@ -17,27 +19,12 @@ export const Home: React.FC<HomeProps> = ({ history }) => {
 			<Header home />
 			<Wrapper>
 				<HeroParticles />
-				<span
-					style={{
-						fontSize: '8rem',
-						fontStyle: 'italic',
-						fontWeight: 'bolder',
-					}}
-				>
-					Gungi.io
-				</span>
-				<h4
-					style={{
-						fontSize: '2rem',
-						fontWeight: 500,
-						width: '38em',
-						fontStyle: 'italic',
-					}}
-				>
+				<Title size="large">Gungi.io</Title>
+				<Subtitle>
 					"You should enjoy the little detours to the fullest. Because that's
 					where you'll find things more important than what you want." - Ging
 					Freecss
-				</h4>
+				</Subtitle>
 				<div
 					style={{
 						display: 'flex',
@@ -48,11 +35,11 @@ export const Home: React.FC<HomeProps> = ({ history }) => {
 				>
 					<Button
 						onClick={() => {
-							history.push('/login');
+							history.push('/game');
 						}}
 						color="primary"
 					>
-						Find game
+						Play game
 					</Button>
 					<Button
 						onClick={() => {

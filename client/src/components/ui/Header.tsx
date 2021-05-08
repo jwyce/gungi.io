@@ -17,7 +17,7 @@ const HeaderWrapper = styled.header`
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 2;
+	z-index: 9999;
 	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -40,6 +40,14 @@ const NavigationWrapper = styled.nav<{ home: boolean }>`
 		props.home ? 'none' : '0 0 3rem rgba(10, 7, 19, 0.1)'};
 `;
 
+const HomeButton = styled(Link)`
+	margin-left: 3em;
+
+	@media (max-width: 400px) {
+		margin-left: 1em;
+	}
+`;
+
 const NavItem = styled(Link)`
 	opacity: 0.75;
 	color: #fff;
@@ -54,16 +62,11 @@ const NavItem = styled(Link)`
 export const Header: React.FC<HeaderProps> = (props) => {
 	return (
 		<HeaderWrapper>
-			<Link to="/">
-				<img
-					src={spy}
-					draggable={false}
-					alt="spy"
-					style={{ width: '36px', marginLeft: '3em' }}
-				/>
-			</Link>
+			<HomeButton to="/">
+				<img src={spy} draggable={false} alt="spy" style={{ width: '36px' }} />
+			</HomeButton>
 			<NavigationWrapper home={props.home}>
-				<NavItem to="/login">Play</NavItem>
+				<NavItem to="/game">Play</NavItem>
 				<NavItem to="/about">About</NavItem>
 				<NavItem to="/contact">Contact</NavItem>
 			</NavigationWrapper>

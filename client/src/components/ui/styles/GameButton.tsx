@@ -35,4 +35,11 @@ export default styled.button<{
 	}
 	box-shadow: ${(props) =>
 		props.selected ? 'inset 0 -0.175em #9045d6' : 'none'};
+
+	@media (max-width: 400px) {
+		font-size: 1rem;
+		padding: 0 1rem;
+		height: 2rem;
+		border-radius: 0.5rem;
+	}
 `;

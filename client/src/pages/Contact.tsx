@@ -1,13 +1,33 @@
 import React from 'react';
-import Button from '../components/ui/styles/Button';
+import styled from 'styled-components';
+
+import coffeeIcon from '../assets/icons/buymeacoffee.svg';
+import feedbackIcon from '../assets/icons/feedback.svg';
+// import gitIcon from '../assets/icons/github.svg';
 import { Footer } from '../components/ui/Footer';
-import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import { Header } from '../components/ui/Header';
+import Button from '../components/ui/styles/Button';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import Panel from '../components/ui/styles/Panel';
 import Paragraph from '../components/ui/styles/Paragraph';
-import coffeeIcon from '../assets/icons/buymeacoffee.svg';
-import gitIcon from '../assets/icons/github.svg';
-import feedbackIcon from '../assets/icons/feedback.svg';
+
+const Heading = styled.div`
+	font-size: 3rem;
+	font-weight: bolder;
+
+	@media (max-width: 450px) {
+		font-size: 2rem;
+	}
+`;
+
+const ButtonLabel = styled.span`
+	font-size: 1rem;
+	padding-left: 10px;
+
+	@media (max-width: 450px) {
+		font-size: 0.9rem;
+	}
+`;
 
 interface ContactProps {}
 
@@ -17,15 +37,22 @@ export const Contact: React.FC<ContactProps> = () => {
 		<>
 			<GlobalStyle />
 			<Header home={false} />
-			<div style={{ height: 'calc(100vh - 16rem)' }}>
+			<div
+				style={{
+					height: 'calc(100vh - 6rem)',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
 				<Panel
 					color="primary"
 					style={{
-						width: '70%',
-						margin: '10rem auto',
+						maxWidth: '80%',
 					}}
 				>
-					<div style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>Contact</div>
+					<Heading>Contact</Heading>
 					<Paragraph>
 						Thanks for playing Gungi! If you enjoyed it, please consider
 						supporting my work!
@@ -42,10 +69,10 @@ export const Contact: React.FC<ContactProps> = () => {
 						}}
 					>
 						<img src={coffeeIcon} alt="icon" style={{ height: '1.5rem' }} />
-						<span style={{ paddingLeft: '10px' }}>Buy me a coffee</span>
+						<ButtonLabel>Buy me a coffee</ButtonLabel>
 					</Button>
 
-					<br />
+					{/* <br />
 					<Paragraph>
 						This project was build with React and Node and is completely open
 						source!
@@ -62,13 +89,12 @@ export const Contact: React.FC<ContactProps> = () => {
 						}}
 					>
 						<img src={gitIcon} alt="icon" style={{ height: '1.5rem' }} />
-						<span style={{ paddingLeft: '10px' }}>GitHub Repo</span>
-					</Button>
+						<ButtonLabel>GitHub Repo</ButtonLabel>
+					</Button> */}
 
 					<br />
 					<Paragraph>
-						This project is a community effort. If you have ideas on how it can
-						improve, please send them my way!
+						If you have ideas on how it can improve, please send them my way!
 					</Paragraph>
 					<Button
 						color="secondary"
@@ -82,7 +108,7 @@ export const Contact: React.FC<ContactProps> = () => {
 						}}
 					>
 						<img src={feedbackIcon} alt="icon" style={{ height: '1.5rem' }} />
-						<span style={{ paddingLeft: '10px' }}>Send Feedback</span>
+						<ButtonLabel>Send Feedback</ButtonLabel>
 					</Button>
 				</Panel>
 			</div>

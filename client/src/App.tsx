@@ -4,8 +4,6 @@ import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Game } from './pages/Game';
 import { Contact } from './pages/Contact';
-import { Login } from './pages/Login';
-import { Lobby } from './pages/Lobby';
 import { NotFound } from './pages/NotFound';
 
 const App: React.FC = () => {
@@ -15,9 +13,8 @@ const App: React.FC = () => {
 				<Route path="/" exact component={Home} />
 				<Route path="/about" exact component={About} />
 				<Route path="/contact" exact component={Contact} />
-				<Route path="/login" exact component={Login} />
-				<Route path="/lobby" exact component={Lobby} />
 				<Route path="/game" exact component={Game} />
+				<Route path="/game/:id" exact component={Game} />
 				<Route path="/" component={NotFound} />
 			</Switch>
 		</BrowserRouter>

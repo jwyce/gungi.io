@@ -6,6 +6,7 @@ export default styled.input`
 	color: #642bc0;
 	font-size: 18px;
 	padding: 8px 10px;
+	width: 100%;
 	margin: 10px;
 	background: #fff;
 	border: none;

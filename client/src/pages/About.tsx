@@ -1,16 +1,26 @@
 import React from 'react';
-import { Footer } from '../components/ui/Footer';
-import GlobalStyle from '../components/ui/styles/GlobalStyle';
-import { Header } from '../components/ui/Header';
-import Paragraph from '../components/ui/styles/Paragraph';
-import Panel from '../components/ui/styles/Panel';
-import { Mobility } from '../components/ui/Mobility';
 import styled from 'styled-components';
+
+import { Footer } from '../components/ui/Footer';
+import { Header } from '../components/ui/Header';
+import { Mobility } from '../components/ui/Mobility';
+import GlobalStyle from '../components/ui/styles/GlobalStyle';
+import Panel from '../components/ui/styles/Panel';
+import Paragraph from '../components/ui/styles/Paragraph';
 
 const LinkStyle = styled.a`
 	color: #9d84ff;
 	&:active {
 		color: #8262ff;
+	}
+`;
+
+const Heading = styled.div`
+	font-size: 3rem;
+	font-weight: bolder;
+
+	@media (max-width: 450px) {
+		font-size: 2rem;
 	}
 `;
 
@@ -26,17 +36,10 @@ export const About: React.FC<AboutProps> = () => {
 				color="primary"
 				style={{
 					width: '70%',
-					margin: '10em auto 2em auto',
+					margin: '5rem auto',
 				}}
 			>
-				<div
-					style={{
-						fontSize: '3rem',
-						fontWeight: 'bolder',
-					}}
-				>
-					What is Gungi?
-				</div>
+				<Heading>What is Gungi?</Heading>
 
 				<Paragraph>
 					Gungi is a two-player strategy board game created by Yoshihiro Togashi
@@ -57,14 +60,7 @@ export const About: React.FC<AboutProps> = () => {
 					possibilities. As in chess and shogi, the goal is to trap the king.
 				</Paragraph>
 
-				<div
-					style={{
-						fontSize: '2.5rem',
-						fontWeight: 'bolder',
-					}}
-				>
-					Pieces and Mobility
-				</div>
+				<Heading>Pieces and Mobility</Heading>
 
 				<Paragraph>
 					There are 13 unique types of pieces with various ranges of mobility at
@@ -215,15 +211,7 @@ export const About: React.FC<AboutProps> = () => {
 					/>
 				</Panel>
 
-				<div
-					style={{
-						fontSize: '2.5rem',
-						fontWeight: 'bolder',
-						paddingTop: '15px',
-					}}
-				>
-					Rules of Gameplay
-				</div>
+				<Heading>Rules of Gameplay</Heading>
 
 				<Paragraph>
 					Visit the link to the{' '}

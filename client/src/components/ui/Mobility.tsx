@@ -7,6 +7,10 @@ const ContentStyle = styled.section`
 	align-items: center;
 	justify-content: space-between;
 	padding: 15px 20px 5px 20px;
+
+	@media (max-width: 1080px) {
+		flex-direction: column;
+	}
 `;
 
 const TitleStyle = styled.div`

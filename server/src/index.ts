@@ -1,10 +1,7 @@
-import cors from 'cors';
 import express from 'express';
 import { v4 } from 'uuid';
+import { InMemorySessionStore, User } from './sessionStore';
 
-import { Session, InMemorySessionStore } from './sessionStore';
-
-const sessionStore = new InMemorySessionStore();
 const PORT = process.env.HTTP_PORT || 4001;
 const app = express();
 const http = require('http').Server(app);
@@ -16,97 +13,59 @@ const { Gungi } = require('gungi.js');
 const gungi = new Gungi();
 console.log(gungi.ascii());
 
-//TODO: user can only have 1 active game
-
 const main = async () => {
+	const sessionStore = new InMemorySessionStore();
+
 	io.use((socket: any, next: any) => {
-		const sessionID = socket.handshake.auth.sessionID as string;
-		if (sessionID) {
-			// find existing session
-			const session = sessionStore.findSession(sessionID);
-			console.log('found session: ', session);
-			if (session) {
-				socket.sessionID = sessionID;
-				socket.userID = session.userID;
-				socket.username = session.username;
-				return next();
-			}
-		}
 		const username = socket.handshake.auth.username;
-		if (!username) {
-			return next(new Error('invalid username'));
-		}
-		// create new session
-		socket.sessionID = v4();
-		socket.userID = v4();
+		const gameId = socket.handshake.auth.gameId;
 		socket.username = username;
+		socket.gameId = gameId;
 		next();
 	});
 
 	io.on('connection', (socket: any) => {
-		console.log('a user connected', socket.sessionID);
-		socket.on('disconnect', () => {
-			console.log('user disconnected', socket.sessionID);
-		});
+		let users: User[] = [];
+		let roomId = '';
 
-		// persist session
-		sessionStore.saveSession(socket.sessionID, {
-			userID: socket.userID,
-			username: socket.username,
-			connected: true,
-		});
+		if (!socket.gameId) {
+			roomId = v4();
 
-		console.log(JSON.stringify(sessionStore.findAllSessions()));
-
-		// emit session details
-		socket.emit('session', {
-			sessionID: socket.sessionID,
-			userID: socket.userID,
-		});
-
-		// fetch existing users
-		const users: Session[] = [];
-		sessionStore.findAllSessions().forEach((session) => {
-			users.push({
-				userID: session.userID,
-				username: session.username,
-				connected: session.connected,
+			sessionStore.saveSession(roomId, {
+				roomId,
+				game: new Gungi(),
+				users: [],
 			});
-		});
-		socket.emit('users', users);
+			sessionStore.addUser(roomId, {
+				userId: socket.id,
+				username: socket.username,
+				userType: 'creator',
+			});
+		} else {
+			roomId = socket.gameId;
 
-		// notify existing users
-		socket.broadcast.emit('user connected', {
-			userID: socket.userID,
-			username: socket.username,
-			connected: true,
-		});
+			sessionStore.addUser(roomId, {
+				userId: socket.id,
+				username: socket.username,
+				userType: 'spectator',
+			});
+		}
 
-		// notify users upon disconnection
-		socket.on('disconnect', async () => {
-			const matchingSockets = await io.in(socket.userID).allSockets();
-			const isDisconnected = matchingSockets.size === 0;
-			if (isDisconnected) {
-				// notify other users
-				socket.broadcast.emit('user disconnected', socket.userID);
-				// update the connection status of the session
-				sessionStore.saveSession(socket.sessionID, {
-					userID: socket.userID,
-					username: socket.username,
-					connected: false,
-				});
-			}
-		});
+		users = sessionStore.getUsers(roomId);
+		socket.join(roomId);
+
+		console.log('users', users);
+		console.log(
+			'rooms',
+			sessionStore.findAllSessions().map((x) => x.roomId)
+		);
+
+		io.to(roomId).emit('roomId', roomId);
+		io.to(roomId).emit('users', users);
 	});
 
-	app.use(
-		cors({
-			origin: 'http://localhost:3000',
-		})
-	);
-
 	app.get('/', (_req, res) => {
-		res.send('just gonna send it');
+		res.send('<h1>hello world</h1>');
 	});
 
 	app.get('/init_game', (_req, res) => {
