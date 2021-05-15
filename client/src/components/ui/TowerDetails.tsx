@@ -40,6 +40,7 @@ export const TowerDetails: React.FC<{}> = observer(() => {
 			const board =
 				gungiStore.gameState === undefined ? null : gungiStore.gameState?.board;
 			const square = gungiStore.squareSelected;
+			console.log('board', board);
 			if (board !== null) {
 				for (let i = 0; i < 3; i++) {
 					const piece = board[square.rank - 1][9 - square.file][i];

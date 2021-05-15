@@ -34,9 +34,14 @@ const Heading1 = styled.div`
 interface LobbyProps {
 	roomId: string;
 	players: User[] | undefined;
+	startGameCallback: (opponentId: string) => void;
 }
 
-export const Lobby: React.FC<LobbyProps> = ({ roomId, players }) => {
+export const Lobby: React.FC<LobbyProps> = ({
+	roomId,
+	players,
+	startGameCallback,
+}) => {
 	return (
 		<>
 			<GlobalStyle />
@@ -75,22 +80,25 @@ export const Lobby: React.FC<LobbyProps> = ({ roomId, players }) => {
 								marginTop: '10px',
 							}}
 						>
-							<LobbyButton
-								onClick={() => {
-									// history.push('/game');
-								}}
-								style={{ color: '#ffa600' }}
-							>
+							<LobbyButton style={{ color: '#ffa600' }}>
 								{players[0].username}
+								{players[0].self && <span> (you)</span>}
 							</LobbyButton>
-							{players.splice(1).map((player: User) => (
+							{players.slice(1).map((player: User) => (
 								<React.Fragment key={player.userId}>
 									<LobbyButton
 										onClick={() => {
-											// history.push('/game');
+											const creatorId = players?.find(
+												(x) => x.userType === 'creator'
+											)?.userId;
+											const selfId = players?.find((x) => x.self)?.userId;
+											if (creatorId === selfId) {
+												startGameCallback(player.userId);
+											}
 										}}
 									>
 										{player.username}
+										{player.self && <span> (you)</span>}
 									</LobbyButton>
 								</React.Fragment>
 							))}

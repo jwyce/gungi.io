@@ -1,12 +1,13 @@
 // import { autorun, toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { OrbitSpinner } from 'react-epic-spinners';
+import { GungiStoreContext } from 'src/stores/GungiStore';
+import { GameState, Move, User } from 'src/typings/types';
 import styled from 'styled-components';
 
 import boardIcon from '../../assets/gungiboard.svg';
 import watchingIcon from '../../assets/icons/user.svg';
-import { GungiStoreContext } from '../../stores/GungiStore';
 import { Board } from '../gameboard/Board';
 import { Footer } from '../ui/Footer';
 import { Header } from '../ui/Header';
@@ -92,176 +93,184 @@ const SpectatorsWrapper = styled.div`
 	padding-top: 15px;
 `;
 
-interface GameProps {}
+interface GameProps {
+	gameState: GameState | undefined;
+	players: User[] | undefined;
+	socketId: string;
+	makeMoveCallback: (move: Move) => void;
+}
 
-export const GungiGame: React.FC<GameProps> = observer(() => {
-	const [moveTypeSelected, setMoveTypeSelected] = useState(() => {
-		return 'PLACE';
-	});
+export const GungiGame: React.FC<GameProps> = observer(
+	({ gameState, players, socketId, makeMoveCallback }) => {
+		const gungiStore = useContext(GungiStoreContext);
+		useEffect(() => {
+			gungiStore.gameState = gameState;
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [gameState]);
 
-	const gungiStore = useContext(GungiStoreContext);
+		const whitePlayer = players?.find((x) => x.userType === 'creator');
+		const blackPlayer = players?.find((x) => x.userType === 'opponent');
+		const spectatorCount = players?.filter(
+			(x) => x.userType === 'spectator'
+		).length;
+		const orientation = blackPlayer?.self ? 'black' : 'white';
 
-	useEffect(() => {
-		gungiStore.fetchGame();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []); // empty array needed here
+		return (
+			<>
+				<GlobalStyle />
+				<Header home={false} />
 
-	// autorun(() => {
-	// 	console.log('hi', toJS(gungiStore.gameState));
-	// });
-	// autorun(() => {
-	// 	console.log('finsihed', gungiStore.state);
-	// });
+				{gameState !== undefined ? (
+					<GameWrapper>
+						<GameFlex>
+							<BoardWrapper onContextMenu={(e) => e.preventDefault()}>
+								<Board
+									board={gameState.board}
+									orientation={orientation}
+									socketPlayer={players?.find((x) => x.userId === socketId)}
+									makeMoveCallback={makeMoveCallback}
+								/>
+							</BoardWrapper>
 
-	return (
-		<>
-			<GlobalStyle />
-			<Header home={false} />
-
-			{gungiStore.state === 'done' && gungiStore.gameState !== undefined ? (
-				<GameWrapper>
-					<GameFlex>
-						<BoardWrapper onContextMenu={(e) => e.preventDefault()}>
-							<Board board={gungiStore.gameState.board} />
-						</BoardWrapper>
-
-						<ActionPanelWrapper>
-							<WrapperSpaceBetween>
-								<GameButton
-									backgroundColor="#29DA37"
-									backgroundColorHover="#0CB51A"
-									selected={moveTypeSelected === 'PLACE'}
-									onClick={() => {
-										setMoveTypeSelected('PLACE');
-									}}
-								>
-									PLACE
-								</GameButton>
-
-								{gungiStore.gameState?.phase === 'game' ? (
-									<>
-										<GameButton
-											backgroundColor="#3C85F5"
-											backgroundColorHover="#2169D8"
-											selected={moveTypeSelected === 'MOVE'}
-											onClick={() => {
-												setMoveTypeSelected('MOVE');
-											}}
-										>
-											MOVE
-										</GameButton>
-
-										<GameButton
-											backgroundColor="#F53C5E"
-											backgroundColorHover="#E1294A"
-											selected={moveTypeSelected === 'ATTACK'}
-											onClick={() => {
-												setMoveTypeSelected('ATTACK');
-											}}
-										>
-											ATTACK
-										</GameButton>
-
-										<GameButton
-											backgroundColor="#F5AB3C"
-											backgroundColorHover="#DF921F"
-											selected={moveTypeSelected === 'STACK'}
-											onClick={() => {
-												setMoveTypeSelected('STACK');
-											}}
-										>
-											STACK
-										</GameButton>
-									</>
-								) : (
+							<ActionPanelWrapper>
+								<WrapperSpaceBetween>
 									<GameButton
-										backgroundColor="#16CD8B"
-										backgroundColorHover="#00B172"
-									>
-										READY
-									</GameButton>
-								)}
-							</WrapperSpaceBetween>
-
-							<WrapperSpaceBetween>
-								<div
-									style={{
-										fontSize: '2rem',
-										fontWeight: 'bolder',
-									}}
-								>
-									{gungiStore.gameState?.phase === 'game'
-										? 'Game Phase'
-										: 'Draft Phase'}
-								</div>
-
-								<div>
-									<LobbyButton
+										backgroundColor="#29DA37"
+										backgroundColorHover="#0CB51A"
+										selected={gungiStore.moveTypeSelected === 'place'}
 										onClick={() => {
-											window.confirm('test?');
+											gungiStore.moveTypeSelected = 'place';
 										}}
 									>
-										FORFEIT
-									</LobbyButton>
-								</div>
-							</WrapperSpaceBetween>
+										PLACE
+									</GameButton>
 
-							<WrapperSpaceBetween>
-								<TurnIndictor
+									{gameState?.phase === 'game' ? (
+										<>
+											<GameButton
+												backgroundColor="#3C85F5"
+												backgroundColorHover="#2169D8"
+												selected={gungiStore.moveTypeSelected === 'move'}
+												onClick={() => {
+													gungiStore.moveTypeSelected = 'move';
+												}}
+											>
+												MOVE
+											</GameButton>
+
+											<GameButton
+												backgroundColor="#F53C5E"
+												backgroundColorHover="#E1294A"
+												selected={gungiStore.moveTypeSelected === 'attack'}
+												onClick={() => {
+													gungiStore.moveTypeSelected = 'attack';
+												}}
+											>
+												ATTACK
+											</GameButton>
+
+											<GameButton
+												backgroundColor="#F5AB3C"
+												backgroundColorHover="#DF921F"
+												selected={gungiStore.moveTypeSelected === 'stack'}
+												onClick={() => {
+													gungiStore.moveTypeSelected = 'stack';
+												}}
+											>
+												STACK
+											</GameButton>
+										</>
+									) : (
+										<GameButton
+											backgroundColor="#16CD8B"
+											backgroundColorHover="#00B172"
+											onClick={() => {
+												gungiStore.moveTypeSelected = 'ready';
+											}}
+										>
+											READY
+										</GameButton>
+									)}
+								</WrapperSpaceBetween>
+
+								<WrapperSpaceBetween>
+									<div
+										style={{
+											fontSize: '2rem',
+											fontWeight: 'bolder',
+										}}
+									>
+										{gameState?.phase === 'game' ? 'Game Phase' : 'Draft Phase'}
+									</div>
+
+									<div>
+										<LobbyButton
+											onClick={() => {
+												window.confirm('test?');
+											}}
+										>
+											FORFEIT
+										</LobbyButton>
+									</div>
+								</WrapperSpaceBetween>
+
+								<WrapperSpaceBetween>
+									<TurnIndictor
+										player="b"
+										isTurn={'b' === gameState?.turn}
+										playerName={`${blackPlayer?.username}`}
+									/>
+									<TurnIndictor
+										player="w"
+										isTurn={'w' === gameState?.turn}
+										playerName={`${whitePlayer?.username}`}
+									/>
+								</WrapperSpaceBetween>
+
+								<TowerDetails />
+								<br />
+								<StockpilePanel
 									player="b"
-									isTurn={'b' === gungiStore.gameState?.turn}
 									playerName="player 1"
+									playerStockPile={gameState?.stockpile_black}
 								/>
-								<TurnIndictor
+
+								<br />
+								<StockpilePanel
 									player="w"
-									isTurn={'w' === gungiStore.gameState?.turn}
 									playerName="player 2"
+									playerStockPile={gameState?.stockpile_white}
 								/>
-							</WrapperSpaceBetween>
 
-							<TowerDetails />
-							<br />
-							<StockpilePanel
-								player="b"
-								playerName="player 1"
-								playerStockPile={gungiStore.gameState?.stockpile_black}
-							/>
+								<SpectatorsWrapper>
+									<img
+										src={watchingIcon}
+										alt="icon"
+										style={{ height: '1em', paddingRight: '5px' }}
+									/>
+									<span
+										style={{
+											textAlign: 'center',
+											color: '#ff8280',
+											fontWeight: 400,
+										}}
+									>
+										{spectatorCount} spectating
+									</span>
+								</SpectatorsWrapper>
+							</ActionPanelWrapper>
+						</GameFlex>
+					</GameWrapper>
+				) : (
+					<div style={{ height: 'calc(100vh - 6rem)' }}>
+						<LoadingContainer>
+							<OrbitSpinner color="#D468FA" />
+						</LoadingContainer>
+					</div>
+				)}
 
-							<br />
-							<StockpilePanel
-								player="w"
-								playerName="player 2"
-								playerStockPile={gungiStore.gameState?.stockpile_white}
-							/>
-
-							<SpectatorsWrapper>
-								<img
-									src={watchingIcon}
-									alt="icon"
-									style={{ height: '1em', paddingRight: '5px' }}
-								/>
-								<span
-									style={{
-										textAlign: 'center',
-										color: '#ff8280',
-										fontWeight: 400,
-									}}
-								>
-									5 spectating
-								</span>
-							</SpectatorsWrapper>
-						</ActionPanelWrapper>
-					</GameFlex>
-				</GameWrapper>
-			) : (
-				<div style={{ height: 'calc(100vh - 6rem)' }}>
-					<LoadingContainer>
-						<OrbitSpinner color="#D468FA" />
-					</LoadingContainer>
-				</div>
-			)}
-
-			<Footer />
-		</>
-	);
-});
+				<Footer />
+			</>
+		);
+	}
+);

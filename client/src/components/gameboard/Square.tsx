@@ -1,6 +1,8 @@
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react';
 import { GungiStoreContext } from 'src/stores/GungiStore';
+import { Move, Piece, User } from 'src/typings/types';
 import styled from 'styled-components';
 
 const Wrapper = styled.div<{ highlight: boolean; hover: boolean }>`
@@ -39,11 +41,20 @@ interface SquareProps {
 	hasPiece: boolean;
 	hint: boolean;
 	id: string;
+	socketPlayer: User | undefined;
+	makeMoveCallback: (move: Move) => void;
 }
 
 export const Square: React.FC<SquareProps> = observer((props) => {
 	const [isOver, setIsOver] = useState(false);
 	const gungiStore = useContext(GungiStoreContext);
+
+	let socketPlayerColor: string = '';
+	if (props.socketPlayer?.userType === 'creator') {
+		socketPlayerColor = 'w';
+	} else if (props.socketPlayer?.userType === 'opponent') {
+		socketPlayerColor = 'b';
+	}
 
 	return (
 		<Wrapper
@@ -61,6 +72,42 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 			}}
 			onMouseUp={() => {
 				setIsOver(false);
+				let src: string | Piece | null = gungiStore.currentSelected ?? null;
+				if (src?.split('-').length !== 2) {
+					src = {
+						type: src ? src.substr(1) : '',
+						color: src ? src.substr(0, 1) : '',
+					};
+				}
+
+				if (
+					gungiStore.currentSelected?.substr(0, 1) ===
+						gungiStore.gameState?.turn &&
+					socketPlayerColor === gungiStore.gameState?.turn
+				) {
+					// check if in legal moves
+					const rank = parseInt(props.id.split('-')[0]);
+					const file = parseInt(props.id.split('-')[1]);
+					const dst =
+						socketPlayerColor === 'b' ? `${10 - rank}-${10 - file}` : props.id;
+
+					const move = {
+						src,
+						dst,
+						type: gungiStore.moveTypeSelected,
+					};
+
+					console.log(JSON.stringify(move, null, 2));
+					console.log('legal moves', toJS(gungiStore.gameState.legal_moves));
+
+					if (
+						gungiStore.gameState.legal_moves.some(
+							(x) => JSON.stringify(x) === JSON.stringify(move)
+						)
+					) {
+						props.makeMoveCallback(move);
+					}
+				}
 			}}
 			onMouseLeave={() => {
 				setIsOver(false);

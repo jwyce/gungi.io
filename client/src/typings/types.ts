@@ -23,6 +23,7 @@ export type User = {
 	userId: string;
 	username: string;
 	userType: 'creator' | 'spectator' | 'opponent';
+	self: boolean;
 };
 
 export type GameState = {

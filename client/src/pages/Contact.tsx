@@ -59,6 +59,9 @@ export const Contact: React.FC<ContactProps> = () => {
 					</Paragraph>
 					<Button
 						color="secondary"
+						onClick={() => {
+							window.open('https://www.buymeacoffee.com/jwyce', '_blank');
+						}}
 						style={{
 							margin: '0 30px',
 							padding: '0 25px',
@@ -98,6 +101,12 @@ export const Contact: React.FC<ContactProps> = () => {
 					</Paragraph>
 					<Button
 						color="secondary"
+						onClick={() => {
+							window.open(
+								'https://docs.google.com/forms/d/e/1FAIpQLScGiGdn6VkLor647mQPN3eiC6Kl962Vxs6YKUAjK6vrTs362w/viewform?usp=sf_link',
+								'_blank'
+							);
+						}}
 						style={{
 							margin: '0 30px',
 							padding: '0 25px',

@@ -17,7 +17,6 @@ export default styled.input`
 	}
 	&:focus {
 		outline: none;
-		border: 1px solid #642bc0;
 		box-shadow: 0 0 10px #642bc0;
 	}
 `;

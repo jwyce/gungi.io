@@ -1,12 +1,15 @@
 import express from 'express';
 import { v4 } from 'uuid';
-import { InMemorySessionStore, User } from './sessionStore';
+import { InMemorySessionStore, Move, User } from './sessionStore';
 
 const PORT = process.env.HTTP_PORT || 4001;
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
 	cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
+	upgradeTimeout: 30000,
+	pingInterval: 10000,
+	pingTimeout: 60000,
 });
 
 const { Gungi } = require('gungi.js');
@@ -54,33 +57,44 @@ const main = async () => {
 		users = sessionStore.getUsers(roomId);
 		socket.join(roomId);
 
+		console.log('roomId', roomId);
 		console.log('users', users);
-		console.log(
-			'rooms',
-			sessionStore.findAllSessions().map((x) => x.roomId)
-		);
 
 		io.to(roomId).emit('roomId', roomId);
 		io.to(roomId).emit('users', users);
-	});
 
-	app.get('/', (_req, res) => {
-		res.send('<h1>hello world</h1>');
-	});
+		socket.on(
+			'init_game',
+			({ opponentId, roomId }: { opponentId: string; roomId: string }) => {
+				console.log('opponent: ', opponentId);
+				console.log('room: ', roomId);
 
-	app.get('/init_game', (_req, res) => {
-		res.json({
-			stockpile_black: gungi.stockpile(gungi.BLACK),
-			stockpile_white: gungi.stockpile(gungi.WHITE),
-			legal_moves: gungi.moves(),
-			phase: gungi.phase(),
-			turn: gungi.turn(),
-			in_check: gungi.in_check(),
-			in_checkmate: gungi.in_checkmate(),
-			in_stalemate: gungi.in_stalemate(),
-			game_over: gungi.game_over(),
-			board: gungi.board(),
-		});
+				// emit game to all clients in room
+				sessionStore.editUserType(roomId, opponentId, 'opponent');
+				const updatedUsers = sessionStore.getUsers(roomId);
+				console.log('updated users: ', updatedUsers);
+				io.to(roomId).emit('game', {
+					gameState: sessionStore.getGameState(roomId),
+					players: updatedUsers,
+				});
+			}
+		);
+
+		socket.on(
+			'make_move',
+			({ roomId, move }: { roomId: string; move: Move }) => {
+				console.log('room: ', roomId);
+				console.log('move: ', JSON.stringify(move, null, 2));
+
+				sessionStore.makeGameMove(roomId, move);
+
+				// emit updated game to all clients in room
+				io.to(roomId).emit('game', {
+					gameState: sessionStore.getGameState(roomId),
+					players: sessionStore.getUsers(roomId),
+				});
+			}
+		);
 	});
 
 	http.listen(PORT, () => {

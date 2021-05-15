@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { Move, Piece as PieceType, User } from '../../typings/types';
+import { flipBoard } from '../../utils/flipBoard';
 import { Coordinates } from './Coordinates';
 import { Empty } from './Empty';
 import { Piece } from './Piece';
 import { Square } from './Square';
-import { Piece as PieceType } from '../../typings/types';
-import { flipBoard } from '../../utils/flipBoard';
+
 // import { toJS } from 'mobx';
 
 const Wrapper = styled.div`
@@ -21,13 +22,21 @@ const Wrapper = styled.div`
 
 interface BoardProps {
 	board: (PieceType | null)[][][];
+	orientation: string;
+	socketPlayer: User | undefined;
+	makeMoveCallback: (move: Move) => void;
 }
 
-export const Board: React.FC<BoardProps> = ({ board }) => {
+export const Board: React.FC<BoardProps> = ({
+	board,
+	orientation,
+	socketPlayer,
+	makeMoveCallback,
+}) => {
 	const squares: any[] = [];
-	const rotatedBoard = flipBoard(board);
-	console.log(rotatedBoard);
-	board = rotatedBoard ?? board;
+	if (orientation === 'black') {
+		board = flipBoard(board) ?? board;
+	}
 
 	for (let i = 0; i < 9; i++) {
 		for (let k = 0; k < 9; k++) {
@@ -51,7 +60,14 @@ export const Board: React.FC<BoardProps> = ({ board }) => {
 					`${topPiece?.color}${topIndex + 1}${topPiece?.type}.svg`
 				);
 				squares.push(
-					<Square id={squareId} key={squareId} hint={false} hasPiece={true}>
+					<Square
+						id={squareId}
+						key={squareId}
+						hint={false}
+						hasPiece={true}
+						socketPlayer={socketPlayer}
+						makeMoveCallback={makeMoveCallback}
+					>
 						<Piece
 							squareId={squareId}
 							icon={`${topPiece?.color}${topIndex + 1}${topPiece?.type}.svg`}
@@ -65,7 +81,14 @@ export const Board: React.FC<BoardProps> = ({ board }) => {
 				);
 			} else {
 				squares.push(
-					<Square id={squareId} key={squareId} hint={false} hasPiece={false}>
+					<Square
+						id={squareId}
+						key={squareId}
+						hint={false}
+						hasPiece={false}
+						socketPlayer={socketPlayer}
+						makeMoveCallback={makeMoveCallback}
+					>
 						<Empty squareId={squareId} />
 					</Square>
 				);
@@ -77,7 +100,7 @@ export const Board: React.FC<BoardProps> = ({ board }) => {
 
 	return (
 		<Wrapper>
-			<Coordinates orientation="black" />
+			<Coordinates orientation={orientation} />
 			{squares}
 		</Wrapper>
 	);
