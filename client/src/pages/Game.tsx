@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { RouteComponentProps, useParams } from 'react-router';
 import { io } from 'socket.io-client';
 import { Lobby } from 'src/components/game/Lobby';
 import { GameState, Move, User } from 'src/typings/types';
@@ -7,7 +7,8 @@ import { GameState, Move, User } from 'src/typings/types';
 import { GungiGame } from '../components/game/GungiGame';
 import { Login } from '../components/game/Login';
 
-export const Game: React.FC<{}> = () => {
+//TODO: refactor before sharing code base
+export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	document.title = 'Play | Gungi.io';
 
 	const { current: socket } = useRef(
@@ -18,6 +19,7 @@ export const Game: React.FC<{}> = () => {
 	const gameId = params.id;
 	const [state, setState] = useState<'login' | 'lobby' | 'game'>('login');
 	const [roomId, setRoomId] = useState('');
+	const [readied, setReadied] = useState<string[]>([]);
 	const [players, setPlayers] = useState<User[] | undefined>(undefined);
 	const [gameState, setGameState] = useState<GameState | undefined>(undefined);
 	const [shouldConnect, setShouldConnect] = useState(false);
@@ -37,7 +39,6 @@ export const Game: React.FC<{}> = () => {
 	};
 
 	const makeMove = (move: Move) => {
-		alert(`move: ${JSON.stringify(move, null, 2)}`);
 		socket.emit('make_move', { roomId, move });
 	};
 
@@ -70,26 +71,51 @@ export const Game: React.FC<{}> = () => {
 			setRoomId(data);
 		});
 
+		socket.on('readied', (data: any) => {
+			setReadied([...readied, data.userId]);
+		});
+
 		socket.on('game', (game: { gameState: GameState; players: User[] }) => {
-			console.log('socket game event', game.gameState);
+			if (game.gameState) {
+				setGameState(game.gameState);
+
+				const users = game.players;
+				users.forEach((user) => {
+					user.self = user.userId === socket.id;
+				});
+
+				setPlayers(users);
+				setShouldConnect(false);
+				setState('game');
+			}
+		});
+
+		socket.on('game_updated', (game: any) => {
+			if (!game.gameState) {
+				console.log('something went wrong getting game');
+				// try again?
+			}
+
+			console.log('got game:', JSON.stringify(game.gameState, null, 2));
 			setGameState(game.gameState);
+		});
 
-			const users = game.players;
-			users.forEach((user) => {
-				user.self = user.userId === socket.id;
-			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state]);
 
-			setPlayers(users);
-			setShouldConnect(false);
-			setState('game');
+	useEffect(() => {
+		socket.on('game_destroyed', () => {
+			alert('opponent disconnected, game destroyed!');
+			socket.disconnect();
+			history.push('/');
 		});
 
 		return () => {
-			console.log('clean up');
-			// socket.disconnect();
+			console.log('disconnect socket');
+			socket.disconnect();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [state]);
+	}, []);
 
 	switch (state) {
 		case 'game':
@@ -98,6 +124,7 @@ export const Game: React.FC<{}> = () => {
 					gameState={gameState}
 					players={players}
 					socketId={socket.id}
+					playersReadied={readied}
 					makeMoveCallback={makeMove}
 				/>
 			);

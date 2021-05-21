@@ -1,6 +1,6 @@
 // import { autorun, toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { GungiStoreContext } from 'src/stores/GungiStore';
 import { GameState, Move, User } from 'src/typings/types';
@@ -97,11 +97,15 @@ interface GameProps {
 	gameState: GameState | undefined;
 	players: User[] | undefined;
 	socketId: string;
+	playersReadied: string[];
 	makeMoveCallback: (move: Move) => void;
 }
 
 export const GungiGame: React.FC<GameProps> = observer(
-	({ gameState, players, socketId, makeMoveCallback }) => {
+	({ gameState, players, socketId, playersReadied, makeMoveCallback }) => {
+		const [buttonState, setButtonState] =
+			useState<'place' | 'attack' | 'move' | 'stack'>('place');
+		const [readied, setReadied] = useState(false);
 		const gungiStore = useContext(GungiStoreContext);
 		useEffect(() => {
 			gungiStore.gameState = gameState;
@@ -113,7 +117,14 @@ export const GungiGame: React.FC<GameProps> = observer(
 		const spectatorCount = players?.filter(
 			(x) => x.userType === 'spectator'
 		).length;
+		const socketPlayer = players?.find((x) => x.userId === socketId);
 		const orientation = blackPlayer?.self ? 'black' : 'white';
+		const whiteReady = playersReadied.find((x) => x === whitePlayer?.userId)
+			? true
+			: false;
+		const blackReady = playersReadied.find((x) => x === blackPlayer?.userId)
+			? true
+			: false;
 
 		return (
 			<>
@@ -127,71 +138,105 @@ export const GungiGame: React.FC<GameProps> = observer(
 								<Board
 									board={gameState.board}
 									orientation={orientation}
-									socketPlayer={players?.find((x) => x.userId === socketId)}
+									socketPlayer={socketPlayer}
 									makeMoveCallback={makeMoveCallback}
 								/>
 							</BoardWrapper>
 
 							<ActionPanelWrapper>
-								<WrapperSpaceBetween>
-									<GameButton
-										backgroundColor="#29DA37"
-										backgroundColorHover="#0CB51A"
-										selected={gungiStore.moveTypeSelected === 'place'}
-										onClick={() => {
-											gungiStore.moveTypeSelected = 'place';
-										}}
-									>
-										PLACE
-									</GameButton>
-
-									{gameState?.phase === 'game' ? (
-										<>
-											<GameButton
-												backgroundColor="#3C85F5"
-												backgroundColorHover="#2169D8"
-												selected={gungiStore.moveTypeSelected === 'move'}
-												onClick={() => {
-													gungiStore.moveTypeSelected = 'move';
-												}}
-											>
-												MOVE
-											</GameButton>
-
-											<GameButton
-												backgroundColor="#F53C5E"
-												backgroundColorHover="#E1294A"
-												selected={gungiStore.moveTypeSelected === 'attack'}
-												onClick={() => {
-													gungiStore.moveTypeSelected = 'attack';
-												}}
-											>
-												ATTACK
-											</GameButton>
-
-											<GameButton
-												backgroundColor="#F5AB3C"
-												backgroundColorHover="#DF921F"
-												selected={gungiStore.moveTypeSelected === 'stack'}
-												onClick={() => {
-													gungiStore.moveTypeSelected = 'stack';
-												}}
-											>
-												STACK
-											</GameButton>
-										</>
-									) : (
+								{socketPlayer?.userType !== 'spectator' && (
+									<WrapperSpaceBetween>
 										<GameButton
-											backgroundColor="#16CD8B"
-											backgroundColorHover="#00B172"
+											backgroundColor="#29DA37"
+											backgroundColorHover="#0CB51A"
+											selected={buttonState === 'place'}
 											onClick={() => {
-												gungiStore.moveTypeSelected = 'ready';
+												gungiStore.moveTypeSelected = 'place';
+												setButtonState('place');
 											}}
 										>
-											READY
+											PLACE
 										</GameButton>
-									)}
-								</WrapperSpaceBetween>
+
+										{gameState?.phase === 'game' ? (
+											<>
+												<GameButton
+													backgroundColor="#3C85F5"
+													backgroundColorHover="#2169D8"
+													selected={buttonState === 'move'}
+													onClick={() => {
+														gungiStore.moveTypeSelected = 'move';
+														setButtonState('move');
+													}}
+												>
+													MOVE
+												</GameButton>
+
+												<GameButton
+													backgroundColor="#F53C5E"
+													backgroundColorHover="#E1294A"
+													selected={buttonState === 'attack'}
+													onClick={() => {
+														gungiStore.moveTypeSelected = 'attack';
+														setButtonState('attack');
+													}}
+												>
+													ATTACK
+												</GameButton>
+
+												<GameButton
+													backgroundColor="#F5AB3C"
+													backgroundColorHover="#DF921F"
+													selected={buttonState === 'stack'}
+													onClick={() => {
+														gungiStore.moveTypeSelected = 'stack';
+														setButtonState('stack');
+													}}
+												>
+													STACK
+												</GameButton>
+											</>
+										) : (
+											<>
+												{!readied && (
+													<GameButton
+														backgroundColor="#16CD8B"
+														backgroundColorHover="#00B172"
+														onClick={() => {
+															// if it's your turn
+															let socketPlayerColor: string = '';
+															if (socketPlayer?.userType === 'creator') {
+																socketPlayerColor = 'w';
+															} else if (
+																socketPlayer?.userType === 'opponent'
+															) {
+																socketPlayerColor = 'b';
+															}
+
+															if (
+																gungiStore.gameState?.turn === socketPlayerColor
+															) {
+																const answer = window.confirm(
+																	'are you satisfied with the current draft configuration?'
+																);
+																if (answer) {
+																	setReadied(true);
+																	makeMoveCallback({
+																		src: null,
+																		dst: null,
+																		type: 'ready',
+																	});
+																}
+															}
+														}}
+													>
+														READY
+													</GameButton>
+												)}
+											</>
+										)}
+									</WrapperSpaceBetween>
+								)}
 
 								<WrapperSpaceBetween>
 									<div
@@ -203,15 +248,22 @@ export const GungiGame: React.FC<GameProps> = observer(
 										{gameState?.phase === 'game' ? 'Game Phase' : 'Draft Phase'}
 									</div>
 
-									<div>
-										<LobbyButton
-											onClick={() => {
-												window.confirm('test?');
-											}}
-										>
-											FORFEIT
-										</LobbyButton>
-									</div>
+									{socketPlayer?.userType !== 'spectator' && (
+										<div>
+											<LobbyButton
+												onClick={() => {
+													const answer = window.confirm(
+														'are you sure you want to forfeit?'
+													);
+													if (answer) {
+														// callback to close socket, destroy game from server, then after respose from server kick everyone to home page
+													}
+												}}
+											>
+												FORFEIT
+											</LobbyButton>
+										</div>
+									)}
 								</WrapperSpaceBetween>
 
 								<WrapperSpaceBetween>
@@ -219,26 +271,28 @@ export const GungiGame: React.FC<GameProps> = observer(
 										player="b"
 										isTurn={'b' === gameState?.turn}
 										playerName={`${blackPlayer?.username}`}
+										ready={blackReady && gungiStore.gameState?.phase !== 'game'}
 									/>
 									<TurnIndictor
 										player="w"
 										isTurn={'w' === gameState?.turn}
 										playerName={`${whitePlayer?.username}`}
+										ready={whiteReady && gungiStore.gameState?.phase !== 'game'}
 									/>
 								</WrapperSpaceBetween>
 
-								<TowerDetails />
+								<TowerDetails orientation={orientation} />
 								<br />
 								<StockpilePanel
 									player="b"
-									playerName="player 1"
+									playerName={`${blackPlayer?.username}`}
 									playerStockPile={gameState?.stockpile_black}
 								/>
 
 								<br />
 								<StockpilePanel
 									player="w"
-									playerName="player 2"
+									playerName={`${whitePlayer?.username}`}
 									playerStockPile={gameState?.stockpile_white}
 								/>
 

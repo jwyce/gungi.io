@@ -63,7 +63,7 @@ export const About: React.FC<AboutProps> = () => {
 				<Heading>Pieces and Mobility</Heading>
 
 				<Paragraph>
-					There are 13 unique types of pieces with various ranges of mobility at
+					There are 13 unique pieces with different ranges of mobility at
 					different tiers. <br />
 					<span style={{ fontSize: 'small' }}>
 						<strong>Note:</strong> Blue means the piece can move into that

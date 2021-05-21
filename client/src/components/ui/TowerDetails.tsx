@@ -31,65 +31,75 @@ const PieceInfo = styled.div`
 	padding: 0 50px;
 `;
 
-export const TowerDetails: React.FC<{}> = observer(() => {
-	const gungiStore = useContext(GungiStoreContext);
+interface TowerDetailsProps {
+	orientation: string;
+}
 
-	const tower: any[] = [];
-	autorun(() => {
-		if (gungiStore.squareSelected !== undefined) {
-			const board =
-				gungiStore.gameState === undefined ? null : gungiStore.gameState?.board;
-			const square = gungiStore.squareSelected;
-			console.log('board', board);
-			if (board !== null) {
-				for (let i = 0; i < 3; i++) {
-					const piece = board[square.rank - 1][9 - square.file][i];
-					if (piece) {
-						tower.push(
-							<PieceInfo key={i}>
-								<img
-									src={
-										pieces[`${piece.color}${i + 1}${piece.type}.svg`].default
-									}
-									alt={`tier ${i + 1}`}
-									draggable={false}
-									style={{ width: '52px' }}
-								/>
-								<div
-									style={{
-										fontSize: '.8rem',
-										fontWeight: 'bold',
-										paddingTop: '5px',
-									}}
-								>
-									tier {i + 1}
-								</div>
-							</PieceInfo>
-						);
+export const TowerDetails: React.FC<TowerDetailsProps> = observer(
+	({ orientation }) => {
+		const gungiStore = useContext(GungiStoreContext);
+
+		let tower: any[] = [];
+		autorun(() => {
+			if (gungiStore.squareSelected !== undefined) {
+				const board =
+					gungiStore.gameState === undefined
+						? null
+						: gungiStore.gameState?.board;
+				const square = gungiStore.squareSelected;
+				if (board !== null) {
+					for (let i = 0; i < 3; i++) {
+						let piece = board[square.rank - 1][9 - square.file][i];
+						if (orientation === 'white') {
+							piece = board[9 - square.rank][square.file - 1][i];
+						}
+						if (piece) {
+							tower.push(
+								<PieceInfo key={i}>
+									<img
+										src={
+											pieces[`${piece.color}${i + 1}${piece.type}.svg`].default
+										}
+										alt={`tier ${i + 1}`}
+										draggable={false}
+										style={{ width: '52px' }}
+									/>
+									<div
+										style={{
+											fontSize: '.8rem',
+											fontWeight: 'bold',
+											paddingTop: '5px',
+										}}
+									>
+										tier {i + 1}
+									</div>
+								</PieceInfo>
+							);
+						}
 					}
 				}
 			}
-		}
-	});
+		});
 
-	return (
-		<Panel
-			color="secondary"
-			style={{
-				padding: '1em',
-				minHeight: '7em',
-				width: '75%',
-				margin: 'auto',
-			}}
-		>
-			<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
-				Tower details
-			</div>
-			{gungiStore.squareSelected === undefined ? (
-				<></>
-			) : (
-				<ContentStyle>{tower}</ContentStyle>
-			)}
-		</Panel>
-	);
-});
+		return (
+			<Panel
+				color="secondary"
+				style={{
+					padding: '1em',
+					minHeight: '7em',
+					width: '75%',
+					margin: 'auto',
+				}}
+			>
+				<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
+					Tower details
+				</div>
+				{gungiStore.squareSelected === undefined ? (
+					<></>
+				) : (
+					<ContentStyle>{tower}</ContentStyle>
+				)}
+			</Panel>
+		);
+	}
+);

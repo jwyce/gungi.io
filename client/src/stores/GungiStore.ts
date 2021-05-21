@@ -9,12 +9,7 @@ class GungiStore {
 	@observable squareSelected: Square | undefined = undefined;
 	@observable prevMoveFrom: string | undefined = undefined;
 	@observable prevMoveTo: string | undefined = undefined;
-	@observable moveTypeSelected:
-		| 'place'
-		| 'ready'
-		| 'attack'
-		| 'move'
-		| 'stack' = 'place';
+	@observable moveTypeSelected: 'place' | 'attack' | 'move' | 'stack' = 'place';
 	@observable hints: (string | null)[] | undefined = undefined;
 }
 

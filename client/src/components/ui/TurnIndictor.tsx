@@ -7,6 +7,7 @@ interface TurnIndictorProps {
 	player: string;
 	isTurn: boolean;
 	playerName: string;
+	ready: boolean;
 }
 
 const Title = styled.div`
@@ -23,9 +24,18 @@ const Name = styled.div<{ isTurn: boolean }>`
 	opacity: ${(props) => (props.isTurn ? '100%' : '75%')};
 `;
 
+const ReadyIndicator = styled.div`
+	background-color: #23d367;
+	border-radius: 50%;
+	height: 1rem;
+	width: 1rem;
+	margin-right: 5px;
+`;
+
 export const TurnIndictor: React.FC<TurnIndictorProps> = (props) => {
 	return (
 		<Title>
+			{props.ready && <ReadyIndicator />}
 			<Name isTurn={props.isTurn}>{props.playerName}</Name>
 			<img
 				src={props.player === 'b' ? blackMarshall : whiteMarshall}

@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
 		<FooterStyle>
 			<img src={spy} alt="spy" style={{ width: '32px' }} />
 			<p style={{ fontSize: '9px' }}>
-				@ {new Date().getFullYear()} Gungi.io All Rights Reserved.
+				@ {new Date().getFullYear()} Jared Wyce. All Rights Reserved.
 			</p>
 		</FooterStyle>
 	);

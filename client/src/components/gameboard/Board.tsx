@@ -53,12 +53,14 @@ export const Board: React.FC<BoardProps> = ({
 
 			const topPiece = tower[topIndex];
 			const pieceBelow = tower[topIndex - 1];
+			let socketPlayerColor: string = '';
+			if (socketPlayer?.userType === 'creator') {
+				socketPlayerColor = 'w';
+			} else if (socketPlayer?.userType === 'opponent') {
+				socketPlayerColor = 'b';
+			}
 
 			if (topIndex >= 0) {
-				console.log(
-					squareId,
-					`${topPiece?.color}${topIndex + 1}${topPiece?.type}.svg`
-				);
 				squares.push(
 					<Square
 						id={squareId}
@@ -71,6 +73,8 @@ export const Board: React.FC<BoardProps> = ({
 						<Piece
 							squareId={squareId}
 							icon={`${topPiece?.color}${topIndex + 1}${topPiece?.type}.svg`}
+							orientation={orientation}
+							socketPlayerColor={socketPlayerColor}
 							belowIcon={
 								pieceBelow
 									? `${pieceBelow?.color}${topIndex}${pieceBelow?.type}.svg`

@@ -13,8 +13,6 @@ const io = require('socket.io')(http, {
 });
 
 const { Gungi } = require('gungi.js');
-const gungi = new Gungi();
-console.log(gungi.ascii());
 
 const main = async () => {
 	const sessionStore = new InMemorySessionStore();
@@ -88,13 +86,43 @@ const main = async () => {
 
 				sessionStore.makeGameMove(roomId, move);
 
+				console.log(
+					'all gamerooms: ',
+					sessionStore.findAllSessions().map((x) => {
+						return `${x.roomId}\n${x.game.ascii()}`;
+					})
+				);
+
+				if (move.type === 'ready') {
+					io.to(roomId).emit('readied', {
+						userId: socket.id,
+					});
+				}
+
 				// emit updated game to all clients in room
-				io.to(roomId).emit('game', {
+				io.to(roomId).emit('game_updated', {
 					gameState: sessionStore.getGameState(roomId),
-					players: sessionStore.getUsers(roomId),
 				});
 			}
 		);
+
+		socket.on('disconnect', () => {
+			console.log('socket disconnected ', socket.id);
+			const roomId = sessionStore.getCurrentRoom(socket.id) ?? '';
+			const roomUsers = sessionStore.getUsers(roomId);
+			const user = roomUsers.find((x) => x.userId === socket.id);
+
+			console.log('disconnecting from: ', { roomId });
+			console.log('user disconnected: ', JSON.stringify(user, null, 2));
+
+			if (user?.userType === 'spectator') {
+				// update players and emit event
+			} else {
+				// destory room and emit event
+				sessionStore.destroySession(roomId);
+				io.to(roomId).emit('game_destroyed');
+			}
+		});
 	});
 
 	http.listen(PORT, () => {

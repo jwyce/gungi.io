@@ -51,6 +51,7 @@ interface SessionStore {
 	removeUser(id: string, userId: string): void;
 	getGameState(id: string): GameState | undefined;
 	makeGameMove(id: string, move: Move): GameState | undefined;
+	getCurrentRoom(socketId: string): string | undefined;
 }
 
 export class InMemorySessionStore implements SessionStore {
@@ -148,6 +149,14 @@ export class InMemorySessionStore implements SessionStore {
 			};
 		}
 
+		return undefined;
+	}
+	getCurrentRoom(socketId: string): string | undefined {
+		for (let [key, value] of this.sessions.entries()) {
+			if (value.users.find((x) => x.userId === socketId)) {
+				return key;
+			}
+		}
 		return undefined;
 	}
 }

@@ -1,4 +1,3 @@
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, {
 	DetailedHTMLProps,
@@ -29,10 +28,20 @@ interface PieceProps {
 	belowIcon?: string | undefined;
 	squareId?: string;
 	stockId?: string;
+	orientation?: string;
+	socketPlayerColor?: string;
 }
 
 export const Piece: React.FC<PieceProps> = observer(
-	({ icon, variant = 'normal', belowIcon, squareId, stockId }) => {
+	({
+		icon,
+		variant = 'normal',
+		belowIcon,
+		squareId,
+		stockId,
+		orientation,
+		socketPlayerColor,
+	}) => {
 		const [state, setState] = useState({
 			isDragging: false,
 			origin: position,
@@ -71,35 +80,45 @@ export const Piece: React.FC<PieceProps> = observer(
 					const pos = squareId.split('-');
 					const rank = parseInt(pos[0]);
 					const file = parseInt(pos[1]);
+					let squareCoords = squareId;
 
-					console.log('id', 10 - rank, 10 - file);
-					console.log('boardPos', rank - 1, 9 - file);
-					console.log(toJS(gungiStore.gameState?.board[rank - 1][9 - file]));
+					if (orientation === 'black') {
+						squareCoords = `${10 - rank}-${10 - file}`;
+					}
+
 					gungiStore.squareSelected = { rank, file };
-					gungiStore.hints = gungiStore.gameState?.legal_moves
-						.filter(
-							(x) =>
-								x.src !== null &&
-								x.src === `${10 - rank}-${10 - file}` &&
-								x.type !== 'place' &&
-								x.type !== 'ready'
-						)
-						.map((x) => {
-							if (x.dst === null) {
-								return null;
-							}
-							const hint = x.dst.split('-');
-							const hintRank = parseInt(hint[0]);
-							const hintFile = parseInt(hint[1]);
-							return `${10 - hintRank}-${10 - hintFile}`;
-						});
-					console.log(toJS(gungiStore.hints));
+
+					if (socketPlayerColor === gungiStore.gameState?.turn) {
+						gungiStore.hints = gungiStore.gameState?.legal_moves
+							.filter(
+								(x) =>
+									x.src !== null &&
+									x.src === squareCoords &&
+									x.type !== 'place' &&
+									x.type !== 'ready'
+							)
+							.map((x) => {
+								if (x.dst === null) {
+									return null;
+								}
+								const hint = x.dst.split('-');
+								const hintRank = parseInt(hint[0]);
+								const hintFile = parseInt(hint[1]);
+
+								let hintCoords = x.dst;
+								if (orientation === 'black') {
+									hintCoords = `${10 - hintRank}-${10 - hintFile}`;
+								}
+
+								return hintCoords;
+							});
+					}
 				} else {
 					gungiStore.squareSelected = undefined;
 					gungiStore.hints = undefined;
 				}
 			},
-			[gungiStore, variant, squareId, stockId]
+			[gungiStore, variant, squareId, stockId, orientation, socketPlayerColor]
 		);
 
 		const handleMouseMove = useCallback(
