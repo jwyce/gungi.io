@@ -24,7 +24,8 @@ export default styled.button<{
 	font-weight: ${(props) => (props.size === 'normal' ? '700' : '600')};
 	margin: ${(props) => (props.size === 'normal' ? '0 10px' : '0 5px')};
 	font-size: ${(props) => (props.size === 'normal' ? '1.5rem' : '1rem')};
-	font-family: Montserrat, sans-serif;
+	font-family: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		sans-serif;
 	line-height: ${(props) => (props.size === 'normal' ? '1.4' : '1')};
 	display: inline-block;
 	text-align: center;

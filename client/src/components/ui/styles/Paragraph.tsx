@@ -6,7 +6,8 @@ export default styled.div`
 	padding: 15px 0;
 	width: 100%;
 	margin: auto;
-	font-family: OpenSans, sans-serif;
+	font-family: OpenSans, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		sans-serif;
 
 	@media (max-width: 450px) {
 		font-size: 1em;

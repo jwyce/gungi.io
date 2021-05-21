@@ -20,7 +20,8 @@ export default styled.button<{ color: String }>`
 	font-weight: 700;
 	margin-top: 0;
 	font-size: 1rem;
-	font-family: Montserrat, sans-serif;
+	font-family: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		sans-serif;
 	line-height: 1.4;
 	display: inline-block;
 	text-align: center;

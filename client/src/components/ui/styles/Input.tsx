@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export default styled.input`
-	font-family: Montserrat, Sans-serif;
+	font-family: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		Sans-serif;
 	font-weight: bold;
 	color: #642bc0;
 	font-size: 18px;

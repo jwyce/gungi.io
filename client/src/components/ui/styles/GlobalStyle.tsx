@@ -6,6 +6,6 @@ body {
   padding: 0;
   color: #fff;
   background: #0A0713;
-  font-family: Montserrat,sans-serif;
+  font-family: Montserrat,-apple-system, BlinkMacSystemFont, "Segoe UI",sans-serif;
 }
 `;

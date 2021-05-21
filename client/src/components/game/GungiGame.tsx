@@ -157,6 +157,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 									{socketPlayer?.userType !== 'spectator' && (
 										<div>
 											<LobbyButton
+												size="small"
 												onClick={() => {
 													const answer = window.confirm(
 														'are you sure you want to forfeit?'
@@ -173,7 +174,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 								</WrapperSpaceBetween>
 
 								{socketPlayer?.userType !== 'spectator' && (
-									<WrapperSpaceBetween style={{ margin: '0 0 5px 0' }}>
+									<WrapperSpaceBetween style={{ margin: '5px 0' }}>
 										<GameButton
 											size="small"
 											backgroundColor="#29DA37"

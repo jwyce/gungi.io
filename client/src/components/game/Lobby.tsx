@@ -110,13 +110,14 @@ export const Lobby: React.FC<LobbyProps> = ({
 								marginTop: '10px',
 							}}
 						>
-							<LobbyButton style={{ color: '#ffa600' }}>
+							<LobbyButton size="normal" style={{ color: '#ffa600' }}>
 								{players[0].username}
 								{players[0].self && <span> (you)</span>}
 							</LobbyButton>
 							{players.slice(1).map((player: User) => (
 								<React.Fragment key={player.userId}>
 									<LobbyButton
+										size="normal"
 										onClick={() => {
 											const creatorId = players?.find(
 												(x) => x.userType === 'creator'
