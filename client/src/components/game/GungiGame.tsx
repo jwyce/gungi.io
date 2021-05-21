@@ -41,7 +41,7 @@ const GameFlex = styled.div`
 
 const BoardWrapper = styled.div`
 	display: block;
-	width: 92.5%;
+	width: 91%;
 	height: 0;
 	background-image: url(${boardIcon});
 	background-repeat: no-repeat;
@@ -144,101 +144,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 							</BoardWrapper>
 
 							<ActionPanelWrapper>
-								{socketPlayer?.userType !== 'spectator' && (
-									<WrapperSpaceBetween>
-										<GameButton
-											backgroundColor="#29DA37"
-											backgroundColorHover="#0CB51A"
-											selected={buttonState === 'place'}
-											onClick={() => {
-												gungiStore.moveTypeSelected = 'place';
-												setButtonState('place');
-											}}
-										>
-											PLACE
-										</GameButton>
-
-										{gameState?.phase === 'game' ? (
-											<>
-												<GameButton
-													backgroundColor="#3C85F5"
-													backgroundColorHover="#2169D8"
-													selected={buttonState === 'move'}
-													onClick={() => {
-														gungiStore.moveTypeSelected = 'move';
-														setButtonState('move');
-													}}
-												>
-													MOVE
-												</GameButton>
-
-												<GameButton
-													backgroundColor="#F53C5E"
-													backgroundColorHover="#E1294A"
-													selected={buttonState === 'attack'}
-													onClick={() => {
-														gungiStore.moveTypeSelected = 'attack';
-														setButtonState('attack');
-													}}
-												>
-													ATTACK
-												</GameButton>
-
-												<GameButton
-													backgroundColor="#F5AB3C"
-													backgroundColorHover="#DF921F"
-													selected={buttonState === 'stack'}
-													onClick={() => {
-														gungiStore.moveTypeSelected = 'stack';
-														setButtonState('stack');
-													}}
-												>
-													STACK
-												</GameButton>
-											</>
-										) : (
-											<>
-												{!readied && (
-													<GameButton
-														backgroundColor="#16CD8B"
-														backgroundColorHover="#00B172"
-														onClick={() => {
-															// if it's your turn
-															let socketPlayerColor: string = '';
-															if (socketPlayer?.userType === 'creator') {
-																socketPlayerColor = 'w';
-															} else if (
-																socketPlayer?.userType === 'opponent'
-															) {
-																socketPlayerColor = 'b';
-															}
-
-															if (
-																gungiStore.gameState?.turn === socketPlayerColor
-															) {
-																const answer = window.confirm(
-																	'are you satisfied with the current draft configuration?'
-																);
-																if (answer) {
-																	setReadied(true);
-																	makeMoveCallback({
-																		src: null,
-																		dst: null,
-																		type: 'ready',
-																	});
-																}
-															}
-														}}
-													>
-														READY
-													</GameButton>
-												)}
-											</>
-										)}
-									</WrapperSpaceBetween>
-								)}
-
-								<WrapperSpaceBetween>
+								<WrapperSpaceBetween style={{ margin: '0' }}>
 									<div
 										style={{
 											fontSize: '2rem',
@@ -266,6 +172,66 @@ export const GungiGame: React.FC<GameProps> = observer(
 									)}
 								</WrapperSpaceBetween>
 
+								{socketPlayer?.userType !== 'spectator' && (
+									<WrapperSpaceBetween style={{ margin: '0 0 5px 0' }}>
+										<GameButton
+											size="small"
+											backgroundColor="#29DA37"
+											backgroundColorHover="#0CB51A"
+											selected={buttonState === 'place'}
+											onClick={() => {
+												gungiStore.moveTypeSelected = 'place';
+												setButtonState('place');
+											}}
+										>
+											PLACE
+										</GameButton>
+
+										{gameState?.phase === 'game' && (
+											<>
+												<GameButton
+													size="small"
+													backgroundColor="#3C85F5"
+													backgroundColorHover="#2169D8"
+													selected={buttonState === 'move'}
+													onClick={() => {
+														gungiStore.moveTypeSelected = 'move';
+														setButtonState('move');
+													}}
+												>
+													MOVE
+												</GameButton>
+
+												<GameButton
+													size="small"
+													backgroundColor="#F53C5E"
+													backgroundColorHover="#E1294A"
+													selected={buttonState === 'attack'}
+													onClick={() => {
+														gungiStore.moveTypeSelected = 'attack';
+														setButtonState('attack');
+													}}
+												>
+													ATTACK
+												</GameButton>
+
+												<GameButton
+													size="small"
+													backgroundColor="#F5AB3C"
+													backgroundColorHover="#DF921F"
+													selected={buttonState === 'stack'}
+													onClick={() => {
+														gungiStore.moveTypeSelected = 'stack';
+														setButtonState('stack');
+													}}
+												>
+													STACK
+												</GameButton>
+											</>
+										)}
+									</WrapperSpaceBetween>
+								)}
+
 								<WrapperSpaceBetween>
 									<TurnIndictor
 										player="b"
@@ -273,6 +239,38 @@ export const GungiGame: React.FC<GameProps> = observer(
 										playerName={`${blackPlayer?.username}`}
 										ready={blackReady && gungiStore.gameState?.phase !== 'game'}
 									/>
+									{!readied && (
+										<GameButton
+											size="small"
+											backgroundColor="#16CD8B"
+											backgroundColorHover="#00B172"
+											onClick={() => {
+												// if it's your turn
+												let socketPlayerColor: string = '';
+												if (socketPlayer?.userType === 'creator') {
+													socketPlayerColor = 'w';
+												} else if (socketPlayer?.userType === 'opponent') {
+													socketPlayerColor = 'b';
+												}
+
+												if (gungiStore.gameState?.turn === socketPlayerColor) {
+													const answer = window.confirm(
+														'are you satisfied with the current draft configuration?'
+													);
+													if (answer) {
+														setReadied(true);
+														makeMoveCallback({
+															src: null,
+															dst: null,
+															type: 'ready',
+														});
+													}
+												}
+											}}
+										>
+											READY
+										</GameButton>
+									)}
 									<TurnIndictor
 										player="w"
 										isTurn={'w' === gameState?.turn}

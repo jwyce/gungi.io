@@ -25,7 +25,7 @@ export const NotFound: React.FC<NotFoundProps> = ({ history }) => {
 		<>
 			<GlobalStyle />
 			<Header home={false} />
-			<Wrapper style={{ height: '89.8vh' }}>
+			<Wrapper style={{ height: 'calc(100vh - 6rem)' }}>
 				<div
 					style={{
 						display: 'flex',

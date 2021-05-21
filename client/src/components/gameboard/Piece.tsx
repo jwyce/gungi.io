@@ -167,7 +167,7 @@ export const Piece: React.FC<PieceProps> = observer(
 				zIndex: state.isDragging ? 900 : 4,
 				position: state.isDragging ? 'absolute' : 'relative',
 				pointerEvents: state.isDragging ? 'none' : '',
-				width: variant === 'normal' ? '80%' : '48px',
+				width: variant === 'normal' ? '80%' : '2.5rem',
 				display: 'block',
 				margin: variant === 'normal' ? '10.02% auto' : '0',
 			}),

@@ -1,4 +1,10 @@
-import React from 'react';
+import {
+	ClickAwayListener,
+	Theme,
+	Tooltip,
+	withStyles,
+} from '@material-ui/core';
+import React, { useState } from 'react';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { LoadingContainer } from 'src/components/ui/styles/LoadingContainer';
 import { User } from 'src/typings/types';
@@ -24,7 +30,7 @@ const Heading = styled.div`
 `;
 
 const Heading1 = styled.div`
-	margin: 8em 11% 0 8em;
+	margin: 5em 11% 0 8em;
 
 	@media (max-width: 650px) {
 		margin: 8em 1em 0 1em;
@@ -37,11 +43,35 @@ interface LobbyProps {
 	startGameCallback: (opponentId: string) => void;
 }
 
+const HtmlTooltip = withStyles((theme: Theme) => ({
+	arrow: {
+		'&::before': {
+			background: '#252036',
+			border: '1px solid #ffa600',
+		},
+	},
+	tooltip: {
+		color: '#ffa600',
+		background: '#252036',
+		fontSize: '.9rem',
+		border: 'solid 1px #ffa600',
+	},
+}))(Tooltip);
+
 export const Lobby: React.FC<LobbyProps> = ({
 	roomId,
 	players,
 	startGameCallback,
 }) => {
+	const [open, setOpen] = useState(false);
+
+	const handleTooltipClose = () => {
+		setOpen(false);
+	};
+
+	const handleTooltipOpen = () => {
+		setOpen(true);
+	};
 	return (
 		<>
 			<GlobalStyle />
@@ -54,7 +84,7 @@ export const Lobby: React.FC<LobbyProps> = ({
 					</LoadingContainer>
 				</div>
 			) : (
-				<div style={{ minHeight: 'calc(100vh - 14rem)' }}>
+				<div style={{ minHeight: 'calc(100vh - 11rem)' }}>
 					<Heading1>
 						<Title size="medium">Lobby</Title>
 						<Paragraph style={{ padding: 0 }}>
@@ -117,17 +147,35 @@ export const Lobby: React.FC<LobbyProps> = ({
 					>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
 							<Input readOnly value={`http://localhost:3000/game/${roomId}`} />
-							<GameButton
-								backgroundColor="#ffae00"
-								backgroundColorHover="#ff9100"
-								onClick={() => {
-									navigator.clipboard.writeText(
-										`http://localhost:3000/game/${roomId}`
-									);
-								}}
-							>
-								Copy
-							</GameButton>
+							<ClickAwayListener onClickAway={handleTooltipClose}>
+								<HtmlTooltip
+									title="Copied!"
+									arrow
+									placement="right"
+									PopperProps={{
+										disablePortal: true,
+									}}
+									onClose={handleTooltipClose}
+									open={open}
+									disableFocusListener
+									disableHoverListener
+									disableTouchListener
+								>
+									<GameButton
+										size="normal"
+										backgroundColor="#ffae00"
+										backgroundColorHover="#ff9100"
+										onClick={() => {
+											handleTooltipOpen();
+											navigator.clipboard.writeText(
+												`http://localhost:3000/game/${roomId}`
+											);
+										}}
+									>
+										Copy
+									</GameButton>
+								</HtmlTooltip>
+							</ClickAwayListener>
 						</div>
 					</div>
 				</div>

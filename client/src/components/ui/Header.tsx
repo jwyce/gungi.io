@@ -17,11 +17,14 @@ const HeaderWrapper = styled.header`
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 9999;
 	user-select: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
+
+	@media (max-width: 400px) {
+		z-index: 9999;
+	}
 `;
 
 const NavigationWrapper = styled.nav<{ home: boolean }>`
@@ -33,7 +36,6 @@ const NavigationWrapper = styled.nav<{ home: boolean }>`
 	height: 100%;
 	padding: 0 2.2rem;
 	width: 14rem;
-
 	border-bottom-left-radius: ${(props) => (props.home ? '0' : '1.4rem')};
 	background-color: ${(props) => (props.home ? 'transparent' : '#9045d6')};
 	box-shadow: ${(props) =>
