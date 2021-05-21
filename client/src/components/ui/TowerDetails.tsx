@@ -20,7 +20,7 @@ const ContentStyle = styled.section`
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	padding: 15px 20px 5px 20px;
+	padding: 0.2em;
 `;
 
 const PieceInfo = styled.div`
@@ -28,7 +28,7 @@ const PieceInfo = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding: 0 50px;
+	padding: 0 2rem;
 `;
 
 interface TowerDetailsProps {
@@ -62,7 +62,7 @@ export const TowerDetails: React.FC<TowerDetailsProps> = observer(
 										}
 										alt={`tier ${i + 1}`}
 										draggable={false}
-										style={{ width: '52px' }}
+										style={{ width: '3rem' }}
 									/>
 									<div
 										style={{
@@ -86,7 +86,7 @@ export const TowerDetails: React.FC<TowerDetailsProps> = observer(
 				color="secondary"
 				style={{
 					padding: '1em',
-					minHeight: '7em',
+					minHeight: '6em',
 					width: '75%',
 					margin: 'auto',
 				}}
