@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import coffeeIcon from '../assets/icons/buymeacoffee.svg';
 import feedbackIcon from '../assets/icons/feedback.svg';
-// import gitIcon from '../assets/icons/github.svg';
+import gitIcon from '../assets/icons/github.svg';
 import { Footer } from '../components/ui/Footer';
 import { Header } from '../components/ui/Header';
 import Button from '../components/ui/styles/Button';
@@ -75,13 +75,16 @@ export const Contact: React.FC<ContactProps> = () => {
 						<ButtonLabel>Buy me a coffee</ButtonLabel>
 					</Button>
 
-					{/* <br />
+					<br />
 					<Paragraph>
 						This project was build with React and Node and is completely open
 						source!
 					</Paragraph>
 					<Button
 						color="secondary"
+						onClick={() => {
+							window.open('https://github.com/jwyce/gungi.io', '_blank');
+						}}
 						style={{
 							margin: '0 30px',
 							padding: '0 25px',
@@ -93,11 +96,12 @@ export const Contact: React.FC<ContactProps> = () => {
 					>
 						<img src={gitIcon} alt="icon" style={{ height: '1.5rem' }} />
 						<ButtonLabel>GitHub Repo</ButtonLabel>
-					</Button> */}
+					</Button>
 
 					<br />
 					<Paragraph>
-						If you have ideas on how it can improve, please send them my way!
+						If you have ideas on how the site can improve, please send them my
+						way!
 					</Paragraph>
 					<Button
 						color="secondary"

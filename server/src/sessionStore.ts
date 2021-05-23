@@ -34,6 +34,7 @@ export interface Session {
 	roomId: string;
 	users: User[];
 	game: any;
+	gameStarted: boolean;
 }
 
 interface SessionStore {
@@ -133,7 +134,6 @@ export class InMemorySessionStore implements SessionStore {
 		if (session) {
 			const gungi = session.game;
 			gungi.move(move);
-			console.log(gungi.ascii());
 
 			return {
 				stockpile_black: gungi.stockpile(gungi.BLACK),

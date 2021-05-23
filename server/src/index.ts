@@ -1,9 +1,17 @@
+import cors from 'cors';
 import express from 'express';
 import { v4 } from 'uuid';
 import { InMemorySessionStore, Move, User } from './sessionStore';
 
 const PORT = process.env.HTTP_PORT || 4001;
 const app = express();
+app.use(
+	cors({
+		origin: 'http://localhost:3000',
+		credentials: true,
+	})
+);
+
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
 	cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
@@ -36,6 +44,7 @@ const main = async () => {
 				roomId,
 				game: new Gungi(),
 				users: [],
+				gameStarted: false,
 			});
 			sessionStore.addUser(roomId, {
 				userId: socket.id,
@@ -55,22 +64,20 @@ const main = async () => {
 		users = sessionStore.getUsers(roomId);
 		socket.join(roomId);
 
-		console.log('roomId', roomId);
-		console.log('users', users);
-
 		io.to(roomId).emit('roomId', roomId);
 		io.to(roomId).emit('users', users);
 
 		socket.on(
 			'init_game',
 			({ opponentId, roomId }: { opponentId: string; roomId: string }) => {
-				console.log('opponent: ', opponentId);
-				console.log('room: ', roomId);
-
 				// emit game to all clients in room
+				const session = sessionStore.findSession(roomId);
+				if (session) {
+					session.gameStarted = true;
+				}
 				sessionStore.editUserType(roomId, opponentId, 'opponent');
+
 				const updatedUsers = sessionStore.getUsers(roomId);
-				console.log('updated users: ', updatedUsers);
 				io.to(roomId).emit('game', {
 					gameState: sessionStore.getGameState(roomId),
 					players: updatedUsers,
@@ -78,20 +85,18 @@ const main = async () => {
 			}
 		);
 
+		socket.on('spectate_active_game', ({ gameId }: { gameId: string }) => {
+			const updatedUsers = sessionStore.getUsers(gameId);
+			io.to(roomId).emit('game', {
+				gameState: sessionStore.getGameState(gameId),
+				players: updatedUsers,
+			});
+		});
+
 		socket.on(
 			'make_move',
 			({ roomId, move }: { roomId: string; move: Move }) => {
-				console.log('room: ', roomId);
-				console.log('move: ', JSON.stringify(move, null, 2));
-
 				sessionStore.makeGameMove(roomId, move);
-
-				console.log(
-					'all gamerooms: ',
-					sessionStore.findAllSessions().map((x) => {
-						return `${x.roomId}\n${x.game.ascii()}`;
-					})
-				);
 
 				if (move.type === 'ready') {
 					io.to(roomId).emit('readied', {
@@ -107,22 +112,39 @@ const main = async () => {
 		);
 
 		socket.on('disconnect', () => {
-			console.log('socket disconnected ', socket.id);
 			const roomId = sessionStore.getCurrentRoom(socket.id) ?? '';
 			const roomUsers = sessionStore.getUsers(roomId);
 			const user = roomUsers.find((x) => x.userId === socket.id);
 
-			console.log('disconnecting from: ', { roomId });
-			console.log('user disconnected: ', JSON.stringify(user, null, 2));
-
 			if (user?.userType === 'spectator') {
 				// update players and emit event
+				sessionStore.removeUser(roomId, socket.id);
+				io.to(roomId).emit('users_updated', {
+					users: sessionStore.getUsers(roomId),
+				});
 			} else {
 				// destory room and emit event
 				sessionStore.destroySession(roomId);
 				io.to(roomId).emit('game_destroyed');
 			}
 		});
+	});
+
+	app.get('/', (_req: any, res: any) => {
+		res.send('hello world!');
+	});
+
+	app.get('/current_rooms', (_req: any, res: any) => {
+		const sessions = sessionStore.findAllSessions();
+		res.send(
+			sessions.map((x) => {
+				return {
+					roomId: x.roomId,
+					users: x.users,
+					gameStarted: x.gameStarted,
+				};
+			})
+		);
 	});
 
 	http.listen(PORT, () => {

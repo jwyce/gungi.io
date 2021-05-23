@@ -8,7 +8,6 @@ import { Empty } from './Empty';
 import { Piece } from './Piece';
 import { Square } from './Square';
 
-// import { toJS } from 'mobx';
 
 const Wrapper = styled.div`
 	-webkit-user-select: none;
@@ -98,7 +97,6 @@ export const Board: React.FC<BoardProps> = ({
 				);
 			}
 
-			// console.log(squareId, toJS(tower));
 		}
 	}
 

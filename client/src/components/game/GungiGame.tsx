@@ -99,10 +99,18 @@ interface GameProps {
 	socketId: string;
 	playersReadied: string[];
 	makeMoveCallback: (move: Move) => void;
+	forfeitCallback: () => void;
 }
 
 export const GungiGame: React.FC<GameProps> = observer(
-	({ gameState, players, socketId, playersReadied, makeMoveCallback }) => {
+	({
+		gameState,
+		players,
+		socketId,
+		playersReadied,
+		makeMoveCallback,
+		forfeitCallback,
+	}) => {
 		const [buttonState, setButtonState] =
 			useState<'place' | 'attack' | 'move' | 'stack'>('place');
 		const [readied, setReadied] = useState(false);
@@ -132,12 +140,6 @@ export const GungiGame: React.FC<GameProps> = observer(
 					: gameState?.stockpile_white.find((x) => x.piece.type === '帥')
 							?.amount === 0
 			);
-			console.log('stuff', gameState?.stockpile_black);
-			console.log(
-				'stuff2',
-				gameState?.stockpile_black.some((x) => x.piece.type === '帥')
-			);
-			console.log('marshall', marshallPlaced);
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [gameState]);
 
@@ -237,7 +239,9 @@ export const GungiGame: React.FC<GameProps> = observer(
 										playerName={`${blackPlayer?.username}`}
 										ready={blackReady && gungiStore.gameState?.phase !== 'game'}
 									/>
-									{!readied && marshallPlaced ? (
+									{!readied &&
+									marshallPlaced &&
+									socketPlayer?.userType !== 'spectator' ? (
 										<GameButton
 											size="small"
 											backgroundColor="#16CD8B"
@@ -279,7 +283,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 																'are you sure you want to forfeit?'
 															);
 															if (answer) {
-																// callback to close socket, destroy game from server, then after respose from server kick everyone to home page
+																forfeitCallback();
 															}
 														}}
 													>

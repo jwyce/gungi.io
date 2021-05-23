@@ -7,7 +7,6 @@ import { GameState, Move, User } from 'src/typings/types';
 import { GungiGame } from '../components/game/GungiGame';
 import { Login } from '../components/game/Login';
 
-//TODO: refactor before sharing code base
 export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	document.title = 'Play | Gungi.io';
 
@@ -31,7 +30,18 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 			setRoomId(gameId);
 		}
 
-		setState('lobby');
+		fetch('http://localhost:4001/current_rooms')
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.find((x: any) => x.roomId === gameId)?.gameStarted) {
+					//@ts-ignore
+					socket.auth = { username, gameId };
+					socket.connect();
+					socket.emit('spectate_active_game', { gameId });
+				} else {
+					setState('lobby');
+				}
+			});
 	};
 
 	const startGame = (opponentId: string) => {
@@ -40,6 +50,11 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 
 	const makeMove = (move: Move) => {
 		socket.emit('make_move', { roomId, move });
+	};
+
+	const forfeit = () => {
+		socket.disconnect();
+		history.push('/');
 	};
 
 	useEffect(() => {
@@ -91,13 +106,14 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 		});
 
 		socket.on('game_updated', (game: any) => {
-			if (!game.gameState) {
-				console.log('something went wrong getting game');
-				// try again?
-			}
-
-			console.log('got game:', JSON.stringify(game.gameState, null, 2));
 			setGameState(game.gameState);
+		});
+		socket.on('users_updated', (data: any) => {
+			const users: User[] = data.users;
+			users.forEach((user) => {
+				user.self = user.userId === socket.id;
+			});
+			setPlayers(users);
 		});
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +127,6 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 		});
 
 		return () => {
-			console.log('disconnect socket');
 			socket.disconnect();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,6 +141,7 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 					socketId={socket.id}
 					playersReadied={readied}
 					makeMoveCallback={makeMove}
+					forfeitCallback={forfeit}
 				/>
 			);
 		case 'lobby':
