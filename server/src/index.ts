@@ -1,20 +1,23 @@
+import 'dotenv-safe/config';
+
 import cors from 'cors';
 import express from 'express';
 import { v4 } from 'uuid';
+
 import { InMemorySessionStore, Move, User } from './sessionStore';
 
-const PORT = process.env.HTTP_PORT || 4001;
+const PORT = process.env.PORT;
 const app = express();
 app.use(
 	cors({
-		origin: 'http://localhost:3000',
+		origin: process.env.CORS_ORIGIN,
 		credentials: true,
 	})
 );
 
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
-	cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
+	cors: { origin: process.env.CORS_ORIGIN, methods: ['GET', 'POST'] },
 	upgradeTimeout: 30000,
 	pingInterval: 10000,
 	pingTimeout: 60000,

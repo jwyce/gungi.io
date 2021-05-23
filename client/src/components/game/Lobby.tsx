@@ -147,7 +147,10 @@ export const Lobby: React.FC<LobbyProps> = ({
 						}}
 					>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
-							<Input readOnly value={`http://localhost:3000/game/${roomId}`} />
+							<Input
+								readOnly
+								value={`${process.env.REACT_APP_PUBLIC_URL}/game/${roomId}`}
+							/>
 							<ClickAwayListener onClickAway={handleTooltipClose}>
 								<HtmlTooltip
 									title="Copied!"
@@ -169,7 +172,7 @@ export const Lobby: React.FC<LobbyProps> = ({
 										onClick={() => {
 											handleTooltipOpen();
 											navigator.clipboard.writeText(
-												`http://localhost:3000/game/${roomId}`
+												`${process.env.REACT_APP_PUBLIC_URL}/game/${roomId}`
 											);
 										}}
 									>

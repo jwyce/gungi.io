@@ -11,7 +11,10 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	document.title = 'Play | Gungi.io';
 
 	const { current: socket } = useRef(
-		io('http://localhost:4001', { autoConnect: false, timeout: 60000 })
+		io(`${process.env.REACT_APP_API_URL}`, {
+			autoConnect: false,
+			timeout: 60000,
+		})
 	);
 	const [username, setUsername] = useState('');
 	const params: any = useParams();
@@ -30,7 +33,8 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 			setRoomId(gameId);
 		}
 
-		fetch('http://localhost:4001/current_rooms')
+		console.log(process.env.REACT_APP_API_URL);
+		fetch(`${process.env.REACT_APP_API_URL}/current_rooms`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.find((x: any) => x.roomId === gameId)?.gameStarted) {
