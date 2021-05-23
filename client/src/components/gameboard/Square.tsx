@@ -71,7 +71,6 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 			}}
 			onMouseUp={() => {
 				setIsOver(false);
-				console.log('mouse up', gungiStore.currentSelected);
 				let src: string | Piece | null = gungiStore.currentSelected ?? null;
 				let selectedPieceColor = '';
 				if (src?.split('-').length !== 2) {
