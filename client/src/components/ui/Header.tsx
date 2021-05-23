@@ -21,10 +21,7 @@ const HeaderWrapper = styled.header`
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-
-	@media (max-width: 400px) {
-		z-index: 9999;
-	}
+	z-index: 2;
 `;
 
 const NavigationWrapper = styled.nav<{ home: boolean }>`

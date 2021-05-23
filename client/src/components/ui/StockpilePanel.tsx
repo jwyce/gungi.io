@@ -25,7 +25,8 @@ export const StockpilePanel: React.FC<StockpilePanelProps> = observer(
 			customBadge: {
 				backgroundColor: '#9045d6',
 				color: 'white',
-				fontFamily: 'Montserrat',
+				fontFamily:
+					'Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
 				transform: 'scale(1) translate(35%, -35%)',
 				zIndex: 5,
 			},

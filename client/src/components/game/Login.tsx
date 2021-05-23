@@ -53,7 +53,7 @@ export const Login: React.FC<LoginProps> = ({
 						type="text"
 						placeholder="Enter your name"
 						auto-complete="off"
-						maxLength={23}
+						maxLength={15}
 						minLength={2}
 						required
 						value={username}

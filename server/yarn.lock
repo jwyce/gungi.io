@@ -616,10 +616,10 @@ graceful-fs@^4.1.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-gungi.js@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/gungi.js/-/gungi.js-1.0.0.tgz#4afaafcc304c4296a99f43db85a71d5d8d9aa573"
-  integrity sha512-H3ylF9haWUGmRXNpFf38ZnEEieyD+IcalAhqPESxQuijanWasgDCzQwJeJBBGa7uz/9MmdWi1vN0cXpnI1Gw1w==
+gungi.js@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/gungi.js/-/gungi.js-1.0.4.tgz#c50e89652020428d33f5f18a5954461be4fe0486"
+  integrity sha512-aqg4P8IK8QdaInfSNou9DyJlrsYGAZhWZm0sTGVrqa6pzPZTb8zm4geo8oFhR4ZXdl+LMWc9u5+EL0Wmlzd9Rw==
 
 has-flag@^3.0.0:
   version "3.0.0"

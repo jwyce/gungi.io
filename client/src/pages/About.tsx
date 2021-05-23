@@ -204,10 +204,10 @@ export const About: React.FC<AboutProps> = () => {
 				<br />
 				<Panel color="secondary" style={{ width: '90%', margin: 'auto' }}>
 					<Mobility
-						name="Marshall (King) x1"
+						name="Marshal (King) x1"
 						pieceIcon="b1帥.svg"
 						image1="marshall.svg"
-						note="The Marshall moves the same for all tiers. Pieces cannot be stacked on the Marshall."
+						note="The Marshal moves the same for all tiers. Pieces cannot be stacked on the Marshal."
 					/>
 				</Panel>
 
@@ -226,12 +226,12 @@ export const About: React.FC<AboutProps> = () => {
 						</li>
 						<li style={{ margin: '0 0 10px 0' }}>
 							In the draft phase, pieces are put on the board in the first three
-							rows, trading off one-by-one. Black places first. The Marshall
-							must always be put first.
+							rows, trading off one-by-one. Black places first. The Marshal must
+							always be put first.
 						</li>
 						<li style={{ margin: '0 0 10px 0' }}>
 							The minimum pieces that must be placed in the beginning is one.
-							This piece must be the Marshall. The maximum number of pieces you
+							This piece must be the Marshal. The maximum number of pieces you
 							can have on the board at any time is 26.
 						</li>
 						<li style={{ margin: '0 0 10px 0' }}>
@@ -268,7 +268,7 @@ export const About: React.FC<AboutProps> = () => {
 											Multiple pawns cannot be placed in the same file
 										</li>
 										<li style={{ margin: '0 0 10px 0' }}>
-											Pawns cannot place the opposing Marshall into check mate
+											Pawns cannot place the opposing Marshal into check mate
 											(although check is allowed)
 										</li>
 										<li style={{ margin: '0 0 10px 0' }}>
@@ -280,7 +280,7 @@ export const About: React.FC<AboutProps> = () => {
 							</ol>
 						</li>
 						<li style={{ margin: '0 0 10px 0' }}>
-							The game concludes when the Marshall is mated. The player who
+							The game concludes when the Marshal is mated. The player who
 							checkmates their opponent wins. If a player at any given point has
 							no legal moves to make and is not currently in check then a
 							stalemate occurs and the game is a tie. Alternatively, the game
