@@ -114,16 +114,16 @@ export class InMemorySessionStore implements SessionStore {
 		if (session) {
 			const gungi = session.game;
 			return {
-				stockpile_black: gungi.stockpile(gungi.BLACK),
-				stockpile_white: gungi.stockpile(gungi.WHITE),
+				stockpile_black: gungi.get_stockpile(gungi.BLACK),
+				stockpile_white: gungi.get_stockpile(gungi.WHITE),
 				legal_moves: gungi.moves(),
-				phase: gungi.phase(),
-				turn: gungi.turn(),
+				phase: gungi.phase,
+				turn: gungi.turn,
 				in_check: gungi.in_check(),
 				in_checkmate: gungi.in_checkmate(),
 				in_stalemate: gungi.in_stalemate(),
 				game_over: gungi.game_over(),
-				board: gungi.board(),
+				board: gungi.get_board(),
 			};
 		}
 
@@ -136,16 +136,16 @@ export class InMemorySessionStore implements SessionStore {
 			gungi.move(move);
 
 			return {
-				stockpile_black: gungi.stockpile(gungi.BLACK),
-				stockpile_white: gungi.stockpile(gungi.WHITE),
+				stockpile_black: gungi.get_stockpile(gungi.BLACK),
+				stockpile_white: gungi.get_stockpile(gungi.WHITE),
 				legal_moves: gungi.moves(),
-				phase: gungi.phase(),
-				turn: gungi.turn(),
+				phase: gungi.phase,
+				turn: gungi.turn,
 				in_check: gungi.in_check(),
 				in_checkmate: gungi.in_checkmate(),
 				in_stalemate: gungi.in_stalemate(),
 				game_over: gungi.game_over(),
-				board: gungi.board(),
+				board: gungi.get_board(),
 			};
 		}
 
