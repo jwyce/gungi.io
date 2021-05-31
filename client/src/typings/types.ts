@@ -14,10 +14,24 @@ export type Move = {
 	type: string;
 };
 
+export type MoveHistory = {
+	turn: string;
+	moveNumber: number;
+	src: Piece | string | null;
+	srcTier?: number;
+	dst: string | null;
+	dstTier?: number;
+	type: string;
+};
+
 export type StockPiece = {
 	piece: Piece;
 	amount: number;
 };
+
+export function IsPiece(src: string | Piece | null): src is Piece {
+	return (src as Piece).type !== undefined;
+}
 
 export type User = {
 	userId: string;
@@ -37,4 +51,8 @@ export type GameState = {
 	in_checkmate: boolean;
 	in_stalemate: boolean;
 	game_over: boolean;
+	armysize_black: number;
+	armysize_white: number;
+	captured: StockPiece[];
+	history: MoveHistory[];
 };

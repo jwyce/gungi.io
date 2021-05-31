@@ -10,6 +10,7 @@ import { HeroParticles } from '../ui/styles/HeroParticles';
 import Input from '../ui/styles/Input';
 import Title from '../ui/styles/Title';
 import Wrapper from '../ui/styles/Wrapper';
+import { MobileWarning } from '../ui/MobileWarning';
 
 const LoginForm = styled.form`
 	display: flex;
@@ -33,6 +34,7 @@ export const Login: React.FC<LoginProps> = ({
 		<>
 			<GlobalStyle />
 			<Header home />
+			<MobileWarning />
 			<Wrapper>
 				<HeroParticles />
 

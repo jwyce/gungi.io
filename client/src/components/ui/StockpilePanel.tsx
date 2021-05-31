@@ -7,11 +7,13 @@ import { Badge, Icon, makeStyles } from '@material-ui/core';
 
 import { Piece } from '../gameboard/Piece';
 import Panel from './styles/Panel';
+import WrapperSpaceBetween from './styles/WrapperSpaceBetween';
 
 interface StockpilePanelProps {
 	player: string;
 	playerName: string;
 	playerStockPile: StockPiece[];
+	armySize: number;
 }
 
 export const StockpilePanel: React.FC<StockpilePanelProps> = observer(
@@ -43,9 +45,21 @@ export const StockpilePanel: React.FC<StockpilePanelProps> = observer(
 					margin: 'auto',
 				}}
 			>
-				<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
-					{props.playerName}'s stockpile
-				</div>
+				<WrapperSpaceBetween style={{ padding: 0, width: '100%' }}>
+					<div style={{ fontSize: '1rem', fontWeight: 'bolder' }}>
+						{props.playerName}'s stockpile
+					</div>
+					<div
+						style={{
+							fontSize: '1rem',
+							fontWeight: 'bolder',
+							color: props.armySize === 26 ? '#fd4d4d' : 'white',
+						}}
+					>
+						army size: {props.armySize}{' '}
+						{props.armySize === 26 && <span>MAX</span>}
+					</div>
+				</WrapperSpaceBetween>
 				<br />
 				{props.playerStockPile.map((stock_piece) => {
 					return (

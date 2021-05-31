@@ -5,6 +5,7 @@ import express from 'express';
 import { v4 } from 'uuid';
 
 import { InMemorySessionStore, Move, User } from './sessionStore';
+import { logoSvg } from './helper';
 
 const PORT = process.env.PORT;
 const app = express();
@@ -148,6 +149,15 @@ const main = async () => {
 				};
 			})
 		);
+	});
+
+	app.get('/shields', (_req: any, res: any) => {
+		const sessions = sessionStore.findAllSessions();
+		res.send({
+			label: 'Gungi.io',
+			message: `${sessions.length} active games`,
+			logoSvg: logoSvg,
+		});
 	});
 
 	http.listen(PORT, () => {

@@ -18,6 +18,16 @@ export type Move = {
 	type: string;
 };
 
+export type MoveHistory = {
+	turn: string;
+	moveNumber: number;
+	src: Piece | string | null;
+	srcTier?: number;
+	dst: string | null;
+	dstTier?: number;
+	type: string;
+};
+
 export interface GameState {
 	board: (Piece | null)[][][];
 	stockpile_black: StockPiece[];
@@ -29,6 +39,10 @@ export interface GameState {
 	in_checkmate: boolean;
 	in_stalemate: boolean;
 	game_over: boolean;
+	armysize_black: number;
+	armysize_white: number;
+	captured: StockPiece[];
+	history: MoveHistory[];
 }
 export interface Session {
 	roomId: string;
@@ -124,6 +138,10 @@ export class InMemorySessionStore implements SessionStore {
 				in_stalemate: gungi.in_stalemate(),
 				game_over: gungi.game_over(),
 				board: gungi.get_board(),
+				armysize_black: gungi.get_army_size(gungi.BLACK),
+				armysize_white: gungi.get_army_size(gungi.WHITE),
+				captured: gungi.get_captured(),
+				history: gungi.get_history(),
 			};
 		}
 
@@ -146,6 +164,10 @@ export class InMemorySessionStore implements SessionStore {
 				in_stalemate: gungi.in_stalemate(),
 				game_over: gungi.game_over(),
 				board: gungi.get_board(),
+				armysize_black: gungi.get_army_size(gungi.BLACK),
+				armysize_white: gungi.get_army_size(gungi.WHITE),
+				captured: gungi.get_captured(),
+				history: gungi.get_history(),
 			};
 		}
 

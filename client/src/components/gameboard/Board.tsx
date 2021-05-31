@@ -8,7 +8,6 @@ import { Empty } from './Empty';
 import { Piece } from './Piece';
 import { Square } from './Square';
 
-
 const Wrapper = styled.div`
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -66,6 +65,7 @@ export const Board: React.FC<BoardProps> = ({
 						key={squareId}
 						hint={false}
 						hasPiece={true}
+						tower={tower}
 						socketPlayer={socketPlayer}
 						makeMoveCallback={makeMoveCallback}
 					>
@@ -96,7 +96,6 @@ export const Board: React.FC<BoardProps> = ({
 					</Square>
 				);
 			}
-
 		}
 	}
 

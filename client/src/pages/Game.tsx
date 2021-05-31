@@ -27,13 +27,11 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	const [shouldConnect, setShouldConnect] = useState(false);
 
 	const chooseName = () => {
-		//TODO: if game already started set state to game and connect to room as spectator
 		setShouldConnect(true);
 		if (gameId) {
 			setRoomId(gameId);
 		}
 
-		console.log(process.env.REACT_APP_API_URL);
 		fetch(`${process.env.REACT_APP_API_URL}/current_rooms`)
 			.then((response) => response.json())
 			.then((data) => {

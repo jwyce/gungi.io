@@ -7,7 +7,6 @@ import { Mobility } from '../components/ui/Mobility';
 import GlobalStyle from '../components/ui/styles/GlobalStyle';
 import Panel from '../components/ui/styles/Panel';
 import Paragraph from '../components/ui/styles/Paragraph';
-
 const LinkStyle = styled.a`
 	color: #9d84ff;
 	&:active {

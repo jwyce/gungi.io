@@ -35,12 +35,29 @@ const Hint = styled.div<{ show: boolean; capture: boolean }>`
 	opacity: ${(props) => (props.show ? '1' : '0')};
 `;
 
+const TowerIndicator = styled.div<{ color: string; tier: number }>`
+	height: 7%;
+	right: 0;
+	position: absolute;
+	top: 0;
+	width: 7%;
+	background-color: ${(props) => (props.color === 'b' ? '#565352' : '#fff')};
+	/* padding: 4.2%; */
+	background-clip: content-box;
+	border-radius: 50%;
+	box-sizing: border-box;
+	pointer-events: none;
+	transform: ${(props) =>
+		props.tier === 1 ? 'translate(-75%, 75%);' : 'translate(-200%, 75%);'};
+`;
+
 interface SquareProps {
 	children: React.ReactNode;
 	hasPiece: boolean;
 	hint: boolean;
 	id: string;
-	socketPlayer: User | undefined;
+	socketPlayer?: User;
+	tower?: (Piece | null)[];
 	makeMoveCallback: (move: Move) => void;
 }
 
@@ -55,9 +72,39 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 		socketPlayerColor = 'b';
 	}
 
+	const convertIdToGameSquare = (id: string) => {
+		// console.log(toJS(gungiStore.gameState?.history.slice(-1)[0]?.src));
+		// console.log(toJS(gungiStore.gameState?.history.slice(-1)[0]?.dst));
+		// console.log(id);
+		if (socketPlayerColor === 'b') {
+			const rank = parseInt(id.split('-')[0]);
+			const file = parseInt(id.split('-')[1]);
+
+			return `${10 - rank}-${10 - file}`;
+		}
+		return id;
+	};
+
+	let tower: any[] = [];
+	if (props.tower) {
+		for (let i = 0; i < 3; i++) {
+			let piece = props.tower[i];
+			if (piece) {
+				tower.push(<TowerIndicator color={piece.color} tier={i + 1} />);
+			}
+		}
+		tower.splice(-1, 1);
+	}
+
 	return (
 		<Wrapper
-			highlight={gungiStore.currentSelected === props.id}
+			highlight={
+				gungiStore.currentSelected === props.id ||
+				gungiStore.gameState?.history.slice(-1)[0]?.src ===
+					convertIdToGameSquare(props.id) ||
+				gungiStore.gameState?.history.slice(-1)[0]?.dst ===
+					convertIdToGameSquare(props.id)
+			}
 			hover={isOver}
 			onClick={() => {
 				if (!props.hasPiece) {
@@ -142,6 +189,7 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 				}
 				capture={props.hasPiece}
 			/>
+			{props.tower && tower && <>{tower}</>}
 		</Wrapper>
 	);
 });

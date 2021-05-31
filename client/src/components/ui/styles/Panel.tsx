@@ -5,7 +5,7 @@ export default styled.div<{ color: String }>`
 	background: ${(props) => (props.color === 'primary' ? '#120C24' : '#252036')};
 	border-radius: 2em;
 
-	@media (max-width: 400px) {
+	@media (max-width: 450px) {
 		padding: ${(props) => (props.color === 'primary' ? '1em' : '10px 20px')};
 	}
 `;

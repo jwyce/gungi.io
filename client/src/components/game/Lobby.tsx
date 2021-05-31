@@ -19,6 +19,8 @@ import LobbyButton from '../ui/styles/LobbyButton';
 import Panel from '../ui/styles/Panel';
 import Paragraph from '../ui/styles/Paragraph';
 import Title from '../ui/styles/Title';
+import crown from '../../assets/icons/crown.svg';
+import { MobileWarning } from '../ui/MobileWarning';
 
 const Heading = styled.div`
 	font-size: 3rem;
@@ -76,6 +78,7 @@ export const Lobby: React.FC<LobbyProps> = ({
 		<>
 			<GlobalStyle />
 			<Header home={false} />
+			<MobileWarning />
 
 			{!players ? (
 				<div style={{ height: 'calc(100vh - 6rem)' }}>
@@ -111,6 +114,11 @@ export const Lobby: React.FC<LobbyProps> = ({
 							}}
 						>
 							<LobbyButton size="normal" style={{ color: '#ffa600' }}>
+								<img
+									src={crown}
+									alt="crown"
+									style={{ width: '1em', marginRight: '5px' }}
+								/>
 								{players[0].username}
 								{players[0].self && <span> (you)</span>}
 							</LobbyButton>

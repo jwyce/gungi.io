@@ -21,7 +21,7 @@ const HeaderWrapper = styled.header`
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-	z-index: 2;
+	z-index: 6;
 `;
 
 const NavigationWrapper = styled.nav<{ home: boolean }>`

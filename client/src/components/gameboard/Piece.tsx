@@ -1,3 +1,4 @@
+import { Tooltip } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, {
 	DetailedHTMLProps,
@@ -10,6 +11,7 @@ import React, {
 	useState,
 } from 'react';
 import { GungiStoreContext } from 'src/stores/GungiStore';
+import { symbolToName } from '../../utils/symbolToNameMap';
 
 function importAll(r: any) {
 	let images = {};
@@ -176,14 +178,20 @@ export const Piece: React.FC<PieceProps> = observer(
 
 		return (
 			<>
-				<img
-					src={pieces[icon].default}
-					alt="piece"
-					draggable={false}
-					ref={pieceEl}
-					onMouseDown={handleMouseDown}
-					style={styles}
-				/>
+				<Tooltip
+					title={`${symbolToName(icon.charAt(2))}`}
+					enterDelay={800}
+					placement="right-start"
+				>
+					<img
+						src={pieces[icon].default}
+						alt="piece"
+						draggable={false}
+						ref={pieceEl}
+						onMouseDown={handleMouseDown}
+						style={styles}
+					/>
+				</Tooltip>
 				{belowIcon && (
 					<img
 						src={pieces[belowIcon].default}
