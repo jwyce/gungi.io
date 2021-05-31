@@ -1,5 +1,5 @@
 <a href="https://gungi.io"><p align="center">
-<img height=100 src="https://raw.githubusercontent.com/jwyce/gungi.io/master/client/src/assets/gungi-github.png?token=AEBJLDPLRN54QO3E2CZDFK3AWUFVE"/>
+<img height=100 src="client/src/assets/gungi-github.png?raw=true"/>
 </p></a>
 <p align="center">
   <strong>Online real-time website to play Gungi from Hunter × Hunter ⚡</strong>
