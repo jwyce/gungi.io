@@ -1,5 +1,5 @@
 <a href="https://gungi.io"><p align="center">
-<img height=100 src="https://raw.githubusercontent.com/benawad/dogehouse/staging/.redesign-assets/dogehouse_logo.svg"/>
+<img height=100 src="https://raw.githubusercontent.com/jwyce/gungi.io/master/client/src/assets/gungi-github.png?token=AEBJLDPLRN54QO3E2CZDFK3AWUFVE"/>
 </p></a>
 <p align="center">
   <strong>Online real-time website to play Gungi from Hunter × Hunter ⚡</strong>
@@ -17,8 +17,8 @@
 
 | Codebase              |      Description          |
 | :-------------------- | :-----------------------: |
-| [client](kousa)       | Create React App Frontend |
-| [server](shawarma)    | Nodejs API with Socket.io |
+| [client](client)       | Create React App Frontend |
+| [server](server)    | Nodejs API with Socket.io |
 
 
 ## Branches
@@ -29,7 +29,7 @@
 ## Why did you make this?
 Like many people, I enjoy consuming Japanese media, and I consume A LOT of it. This game appears in the manga/anime Hunter × Hunter, and seemed really interesting and looked like it had a ton of complexity and depth to play around in. 
 
-So, inspired by this [reddit post](post) which spelled out a complete ruleset, I set out to make it a reality and accessible for anyone to play and explore. 
+So, inspired by this [reddit post](https://www.reddit.com/r/HunterXHunter/comments/6803yz/revised_rules_of_gungi_in_hunterxhunter_pdf/) which spelled out a complete ruleset, I set out to make it a reality and accessible for anyone to play and explore. 
 
 An additional side benefit in making this was to use it as a learning opporutnity to familiarize myself with some of the latest popular web technologies, and this is the first project of more to come!
 
