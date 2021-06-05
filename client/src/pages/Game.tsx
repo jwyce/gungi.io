@@ -3,6 +3,8 @@ import { RouteComponentProps, useParams } from 'react-router';
 import { io } from 'socket.io-client';
 import { Lobby } from 'src/components/game/Lobby';
 import { GameState, Move, User } from 'src/typings/types';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import { GungiGame } from '../components/game/GungiGame';
 import { Login } from '../components/game/Login';
@@ -25,6 +27,7 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	const [players, setPlayers] = useState<User[] | undefined>(undefined);
 	const [gameState, setGameState] = useState<GameState | undefined>(undefined);
 	const [shouldConnect, setShouldConnect] = useState(false);
+	const swal = withReactContent(Swal);
 
 	const chooseName = () => {
 		setShouldConnect(true);
@@ -55,8 +58,7 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	};
 
 	const forfeit = () => {
-		socket.disconnect();
-		history.push('/');
+		socket.emit('game_over', { forfeit: true });
 	};
 
 	useEffect(() => {
@@ -109,6 +111,11 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 
 		socket.on('game_updated', (game: any) => {
 			setGameState(game.gameState);
+
+			if (game.gameState.game_over) {
+				console.log('game: ', game.gameState);
+				socket.emit('game_over', { forfeit: false });
+			}
 		});
 		socket.on('users_updated', (data: any) => {
 			const users: User[] = data.users;
@@ -122,10 +129,39 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	}, [state]);
 
 	useEffect(() => {
+		socket.on('game_over_notification', (notif: any) => {
+			swal
+				.fire({
+					title: <span>Game Over</span>,
+					html: <div>{notif.message}!</div>,
+					icon: 'warning',
+					showConfirmButton: true,
+					confirmButtonColor: '#9045d6',
+				})
+				.then((response) => {
+					if (response.isConfirmed) {
+						socket.disconnect();
+						history.push('/');
+					}
+				});
+		});
 		socket.on('game_destroyed', () => {
-			alert('opponent disconnected, game destroyed!');
-			socket.disconnect();
-			history.push('/');
+			swal
+				.fire({
+					title: <span>Game Over</span>,
+					html: (
+						<div>Opponent disconnected! Kicking everyone from the room</div>
+					),
+					icon: 'warning',
+					showConfirmButton: true,
+					confirmButtonColor: '#9045d6',
+				})
+				.then((response) => {
+					if (response.isConfirmed) {
+						socket.disconnect();
+						history.push('/');
+					}
+				});
 		});
 
 		return () => {

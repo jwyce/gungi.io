@@ -1,5 +1,5 @@
 <a href="https://gungi.io"><p align="center">
-<img height=100 src="client/src/assets/gungi-github.png?raw=true"/>
+<img height=100 src="client/src/assets/gungi-github.svg?raw=true"/>
 </p></a>
 <p align="center">
   <strong>Online real-time website to play Gungi from Hunter × Hunter ⚡</strong>
@@ -19,6 +19,7 @@
 | :-------------------- | :-----------------------: |
 | [client](client)       | Create React App Frontend |
 | [server](server)    | Nodejs API with Socket.io |
+| [gungi.js](https://github.com/jwyce/gungi.js)    | Library for game logic |
 
 
 ## Branches

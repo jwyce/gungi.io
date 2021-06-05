@@ -1,8 +1,9 @@
 import React from 'react';
+import { symbolToName } from 'src/utils/symbolToNameMap';
+
+import { Badge, Icon, makeStyles, Tooltip } from '@material-ui/core';
+
 import { StockPiece } from '../../typings/types';
-
-import { Badge, Icon, makeStyles } from '@material-ui/core';
-
 import { PieceIcon } from '../ui/PieceIcon';
 import Panel from './styles/Panel';
 
@@ -48,9 +49,15 @@ export const CapturedPanel: React.FC<CapturedPanelProps> = (props) => {
 							className={classes.margin}
 						>
 							<Icon style={{ fontSize: '2.5rem' }}>
-								<PieceIcon
-									icon={`${stock_piece.piece.color}1${stock_piece.piece.type}.svg`}
-								/>
+								<Tooltip
+									title={`${symbolToName(stock_piece.piece.type)}`}
+									enterDelay={800}
+									placement="right-start"
+								>
+									<PieceIcon
+										icon={`${stock_piece.piece.color}1${stock_piece.piece.type}.svg`}
+									/>
+								</Tooltip>
 							</Icon>
 						</Badge>
 					)

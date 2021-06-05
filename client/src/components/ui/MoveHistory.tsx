@@ -22,19 +22,26 @@ export const MoveHistoryPanel: React.FC<MoveHistoryPanelProps> = (props) => {
 				</Paragraph>
 			);
 		} else if (IsPiece(move.src)) {
-			src = 'stockpile';
+			src = `stockpile ${move.src.type}`;
 		} else {
 			const rank = parseInt(move.src.split('-')[0]);
 			const file = parseInt(move.src.split('-')[1]);
 			const fileLetter = fileToLetterMap(file);
-			src = `${rank}-${fileLetter}-${move.srcTier ? move.srcTier + 1 : 1}`;
+			src = `${rank}-${fileLetter}-${move.srcTier ? move.srcTier + 1 : 1} ${
+				move.srcPiece?.type
+			}`;
 		}
 
 		if (move.dst) {
 			const rank = parseInt(move.dst.split('-')[0]);
 			const file = parseInt(move.dst.split('-')[1]);
 			const fileLetter = fileToLetterMap(file);
-			dst = `${rank}-${fileLetter}-${move.dstTier}`;
+			dst = `${rank}-${fileLetter}-${move.dstTier}
+      ${
+				move.type === 'attack' || move.type === 'stack'
+					? ` (${move.dstPiece?.color}${move.dstPiece?.type})`
+					: ''
+			}`;
 		}
 
 		return movehistory.push(

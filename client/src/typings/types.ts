@@ -19,8 +19,10 @@ export type MoveHistory = {
 	moveNumber: number;
 	src: Piece | string | null;
 	srcTier?: number;
+	srcPiece?: Piece;
 	dst: string | null;
 	dstTier?: number;
+	dstPiece?: Piece;
 	type: string;
 };
 

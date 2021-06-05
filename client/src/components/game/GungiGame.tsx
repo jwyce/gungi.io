@@ -1,10 +1,11 @@
-// import { autorun, toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
 import { OrbitSpinner } from 'react-epic-spinners';
 import { GungiStoreContext } from 'src/stores/GungiStore';
 import { GameState, Move, User } from 'src/typings/types';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import boardIcon from '../../assets/gungiboard.svg';
 import watchingIcon from '../../assets/icons/user.svg';
@@ -145,6 +146,8 @@ export const GungiGame: React.FC<GameProps> = observer(
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [gameState]);
 
+		const swal = withReactContent(Swal);
+
 		return (
 			<>
 				<GlobalStyle />
@@ -265,17 +268,31 @@ export const GungiGame: React.FC<GameProps> = observer(
 													if (
 														gungiStore.gameState?.turn === socketPlayerColor
 													) {
-														const answer = window.confirm(
-															'are you satisfied with the current draft configuration?'
-														);
-														if (answer) {
-															setReadied(true);
-															makeMoveCallback({
-																src: null,
-																dst: null,
-																type: 'ready',
+														swal
+															.fire({
+																title: <span>Ready?</span>,
+																html: (
+																	<div>
+																		Are you satisfied with your current draft
+																		configuration?
+																	</div>
+																),
+																icon: 'question',
+																showConfirmButton: true,
+																showCancelButton: true,
+																confirmButtonText: 'Yes, ready',
+																confirmButtonColor: '#9045d6',
+															})
+															.then((response) => {
+																if (response.isConfirmed) {
+																	setReadied(true);
+																	makeMoveCallback({
+																		src: null,
+																		dst: null,
+																		type: 'ready',
+																	});
+																}
 															});
-														}
 													}
 												}}
 											>
@@ -288,12 +305,25 @@ export const GungiGame: React.FC<GameProps> = observer(
 														<LobbyButton
 															size="small"
 															onClick={() => {
-																const answer = window.confirm(
-																	'are you sure you want to forfeit?'
-																);
-																if (answer) {
-																	forfeitCallback();
-																}
+																swal
+																	.fire({
+																		title: <span>Forfeit?</span>,
+																		html: (
+																			<div>
+																				are you sure you want to forfeit?
+																			</div>
+																		),
+																		icon: 'question',
+																		showConfirmButton: true,
+																		showCancelButton: true,
+																		confirmButtonText: 'Yes, forfeit',
+																		confirmButtonColor: '#9045d6',
+																	})
+																	.then((response) => {
+																		if (response.isConfirmed) {
+																			forfeitCallback();
+																		}
+																	});
 															}}
 														>
 															FORFEIT

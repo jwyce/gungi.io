@@ -2,7 +2,10 @@ import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useContext } from 'react';
 import { GungiStoreContext } from 'src/stores/GungiStore';
+import { symbolToName } from 'src/utils/symbolToNameMap';
 import styled from 'styled-components';
+
+import { Tooltip } from '@material-ui/core';
 
 import Panel from './styles/Panel';
 
@@ -56,14 +59,21 @@ export const TowerDetails: React.FC<TowerDetailsProps> = observer(
 						if (piece) {
 							tower.push(
 								<PieceInfo key={i}>
-									<img
-										src={
-											pieces[`${piece.color}${i + 1}${piece.type}.svg`].default
-										}
-										alt={`tier ${i + 1}`}
-										draggable={false}
-										style={{ width: '3rem' }}
-									/>
+									<Tooltip
+										title={`${symbolToName(piece.type)}`}
+										enterDelay={800}
+										placement="right-start"
+									>
+										<img
+											src={
+												pieces[`${piece.color}${i + 1}${piece.type}.svg`]
+													.default
+											}
+											alt={`tier ${i + 1}`}
+											draggable={false}
+											style={{ width: '3rem' }}
+										/>
+									</Tooltip>
 									<div
 										style={{
 											fontSize: '.8rem',

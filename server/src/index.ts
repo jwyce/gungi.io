@@ -115,6 +115,28 @@ const main = async () => {
 			}
 		);
 
+		socket.on('game_over', ({ forfeit }: { forfeit: boolean }) => {
+			const roomId = sessionStore.getCurrentRoom(socket.id) ?? '';
+			const game = sessionStore.getGameState(roomId);
+			// destory room and emit event
+			sessionStore.destroySession(roomId);
+
+			let message = '';
+			if (game?.in_stalemate) {
+				message = 'Stalemate';
+			} else if (game?.in_checkmate && game.turn === 'b') {
+				message = 'White Wins';
+			} else if (game?.in_checkmate && game.turn === 'w') {
+				message = 'Black Wins';
+			} else if (forfeit && game?.turn === 'b') {
+				message = 'Black Forfeits';
+			} else if (forfeit && game?.turn === 'w') {
+				message = 'White Forfeits';
+			}
+
+			io.to(roomId).emit('game_over_notification', { message });
+		});
+
 		socket.on('disconnect', () => {
 			const roomId = sessionStore.getCurrentRoom(socket.id) ?? '';
 			const roomUsers = sessionStore.getUsers(roomId);

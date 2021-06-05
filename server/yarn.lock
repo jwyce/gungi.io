@@ -644,10 +644,12 @@ graceful-fs@^4.1.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-gungi.js@1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/gungi.js/-/gungi.js-1.0.14.tgz#ec6bad401148726251a27d1cd8674a3d73e00496"
-  integrity sha512-7B1wnmeQfUAbCpUwi8yprbAmJLKb+T4Klmd/SUAgGsaWm0KQND4g8NzgWCGNFJBYScl6zJ7z/cQ1xxbqYjjEqQ==
+gungi.js@1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/gungi.js/-/gungi.js-1.0.16.tgz#e4dfcedf74818ce6b5fb80a56f39651dca4a537c"
+  integrity sha512-s++za1hPlGgPMfg7zI5Pgz5ZZMvo6xTY852CzEdR7a9a55HyUIYrNTBmhwqaXP7X9W1biI+HIzDpYVhLNBxUIw==
+  dependencies:
+    lodash "^4.17.21"
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -830,6 +832,11 @@ latest-version@^5.0.0:
   integrity sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==
   dependencies:
     package-json "^6.3.0"
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lowercase-keys@^1.0.0, lowercase-keys@^1.0.1:
   version "1.0.1"
