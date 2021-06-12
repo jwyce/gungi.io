@@ -49,6 +49,7 @@ export type GameState = {
 	legal_moves: Move[];
 	phase: string;
 	turn: string;
+	check_square: string;
 	in_check: boolean;
 	in_checkmate: boolean;
 	in_stalemate: boolean;

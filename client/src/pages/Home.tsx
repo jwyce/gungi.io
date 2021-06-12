@@ -20,6 +20,7 @@ export const Home: React.FC<HomeProps> = ({ history }) => {
 			<Wrapper>
 				<HeroParticles />
 				<Title size="large">Gungi.io</Title>
+				<Subtitle style={{ margin: '0' }}>v1.0.7</Subtitle>
 				<Subtitle>
 					"You should enjoy the little detours to the fullest. Because that's
 					where you'll find things more important than what you want." - Ging

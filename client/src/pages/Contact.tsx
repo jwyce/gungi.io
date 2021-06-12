@@ -25,7 +25,7 @@ const ButtonLabel = styled.span`
 	padding-left: 10px;
 
 	@media (max-width: 450px) {
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 	}
 `;
 
@@ -77,7 +77,7 @@ export const Contact: React.FC<ContactProps> = () => {
 
 					<br />
 					<Paragraph>
-						This project was build with React and Node and is completely open
+						This project was built with React and Node and is completely open
 						source!
 					</Paragraph>
 					<Button

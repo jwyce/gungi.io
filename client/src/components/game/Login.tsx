@@ -38,7 +38,9 @@ export const Login: React.FC<LoginProps> = ({
 			<Wrapper>
 				<HeroParticles />
 
-				<Title size="large">Gungi.io</Title>
+				<Title size="large" style={{ marginBottom: '15px' }}>
+					Gungi.io
+				</Title>
 				<img
 					src={accountIcon}
 					alt="account"

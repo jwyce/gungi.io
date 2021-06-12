@@ -1,12 +1,30 @@
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState } from 'react';
 import { GungiStoreContext } from 'src/stores/GungiStore';
-import { Move, Piece, User } from 'src/typings/types';
+import { GameState, Move, Piece, User } from 'src/typings/types';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-const Wrapper = styled.div<{ highlight: boolean; hover: boolean }>`
-	background-color: ${(props) =>
-		props.highlight ? '#a152ff66' : 'transparent'};
+enum HighlightType {
+	NONE = 'none',
+	HIGHLIGHT = 'highlight',
+	CHECK = 'check',
+}
+
+const handleHighlightColorChange = (color: HighlightType) => {
+	switch (color) {
+		case HighlightType.HIGHLIGHT:
+			return '#a152ff66;';
+		case HighlightType.CHECK:
+			return '#ff6060ab';
+		default:
+			return 'transparent';
+	}
+};
+
+const Wrapper = styled.div<{ highlight: HighlightType; hover: boolean }>`
+	background-color: ${(props) => handleHighlightColorChange(props.highlight)};
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -42,7 +60,6 @@ const TowerIndicator = styled.div<{ color: string; tier: number }>`
 	top: 0;
 	width: 7%;
 	background-color: ${(props) => (props.color === 'b' ? '#565352' : '#fff')};
-	/* padding: 4.2%; */
 	background-clip: content-box;
 	border-radius: 50%;
 	box-sizing: border-box;
@@ -72,10 +89,9 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 		socketPlayerColor = 'b';
 	}
 
+	const swal = withReactContent(Swal);
+
 	const convertIdToGameSquare = (id: string) => {
-		// console.log(toJS(gungiStore.gameState?.history.slice(-1)[0]?.src));
-		// console.log(toJS(gungiStore.gameState?.history.slice(-1)[0]?.dst));
-		// console.log(id);
 		if (socketPlayerColor === 'b') {
 			const rank = parseInt(id.split('-')[0]);
 			const file = parseInt(id.split('-')[1]);
@@ -83,6 +99,27 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 			return `${10 - rank}-${10 - file}`;
 		}
 		return id;
+	};
+
+	const getSquareHighlightFromGameState = (
+		currentSelected?: string,
+		gameState?: GameState
+	) => {
+		if (
+			currentSelected === props.id ||
+			gameState?.history.slice(-1)[0]?.src ===
+				convertIdToGameSquare(props.id) ||
+			gameState?.history.slice(-1)[0]?.dst === convertIdToGameSquare(props.id)
+		) {
+			return HighlightType.HIGHLIGHT;
+		} else if (
+			gameState?.in_check &&
+			convertIdToGameSquare(props.id) === gameState.check_square
+		) {
+			return HighlightType.CHECK;
+		} else {
+			return HighlightType.NONE;
+		}
 	};
 
 	let tower: any[] = [];
@@ -98,13 +135,10 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 
 	return (
 		<Wrapper
-			highlight={
-				gungiStore.currentSelected === props.id ||
-				gungiStore.gameState?.history.slice(-1)[0]?.src ===
-					convertIdToGameSquare(props.id) ||
-				gungiStore.gameState?.history.slice(-1)[0]?.dst ===
-					convertIdToGameSquare(props.id)
-			}
+			highlight={getSquareHighlightFromGameState(
+				gungiStore.currentSelected,
+				gungiStore.gameState
+			)}
 			hover={isOver}
 			onClick={() => {
 				if (!props.hasPiece) {
@@ -156,10 +190,72 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 					const dst =
 						socketPlayerColor === 'b' ? `${10 - rank}-${10 - file}` : props.id;
 
+					let moveType = '';
+					if (!gungiStore.squareSelected) {
+						moveType = 'place';
+					} else if (gungiStore.squareSelected) {
+						// if mouse up on empty square => movement
+						let boardCoords = convertIdToGameSquare(props.id);
+						const realRank = parseInt(boardCoords.split('-')[0]);
+						const realFile = parseInt(boardCoords.split('-')[1]);
+
+						const tower =
+							gungiStore.gameState.board[9 - realRank][realFile - 1];
+						if (tower) {
+							let top: Piece | null = null;
+							for (let i = 2; i >= 0; i--) {
+								if (tower[i] !== null) {
+									top = tower[i];
+								}
+							}
+
+							if (top === null) {
+								moveType = 'move';
+							} else if (gungiStore.currentSelected !== props.id) {
+								swal
+									.fire({
+										title: <span>Attack or Stack?</span>,
+										showConfirmButton: true,
+										showDenyButton: true,
+										confirmButtonText: 'Attack',
+										confirmButtonColor: '#F53C5E',
+										denyButtonText: 'Stack',
+										denyButtonColor: '#F5AB3C',
+									})
+									.then((response) => {
+										if (response.isConfirmed) {
+											moveType = 'attack';
+										} else if (response.isDenied) {
+											moveType = 'stack';
+										}
+
+										const move = {
+											src,
+											dst,
+											type: moveType,
+										};
+
+										if (
+											gungiStore.gameState?.legal_moves.some(
+												(x) =>
+													JSON.stringify(x.src) === JSON.stringify(move.src) &&
+													x.dst === move.dst &&
+													x.type === move.type
+											)
+										) {
+											gungiStore.currentSelected = undefined;
+											gungiStore.hints = undefined;
+											props.makeMoveCallback(move);
+										}
+									});
+							}
+						}
+					}
+
 					const move = {
 						src,
 						dst,
-						type: gungiStore.moveTypeSelected,
+						type: moveType,
 					};
 
 					if (

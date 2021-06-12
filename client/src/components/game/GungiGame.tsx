@@ -114,8 +114,8 @@ export const GungiGame: React.FC<GameProps> = observer(
 		makeMoveCallback,
 		forfeitCallback,
 	}) => {
-		const [buttonState, setButtonState] =
-			useState<'place' | 'attack' | 'move' | 'stack'>('place');
+		// const [buttonState, setButtonState] =
+		// 	useState<'place' | 'attack' | 'move' | 'stack'>('place');
 		const [readied, setReadied] = useState(false);
 		const [marshallPlaced, setMarshallPlaced] = useState(false);
 
@@ -132,6 +132,13 @@ export const GungiGame: React.FC<GameProps> = observer(
 		const blackReady = playersReadied.find((x) => x === blackPlayer?.userId)
 			? true
 			: false;
+		// if it's your turn
+		let socketPlayerColor: string = '';
+		if (socketPlayer?.userType === 'creator') {
+			socketPlayerColor = 'w';
+		} else if (socketPlayer?.userType === 'opponent') {
+			socketPlayerColor = 'b';
+		}
 
 		const gungiStore = useContext(GungiStoreContext);
 		useEffect(() => {
@@ -180,7 +187,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 										</div>
 									</WrapperSpaceBetween>
 
-									{socketPlayer?.userType !== 'spectator' && (
+									{/* {socketPlayer?.userType !== 'spectator' && (
 										<WrapperSpaceBetween style={{ margin: '5px 0' }}>
 											<GameButton
 												size="small"
@@ -238,7 +245,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 												</>
 											)}
 										</WrapperSpaceBetween>
-									)}
+									)} */}
 
 									<WrapperSpaceBetween>
 										<TurnIndictor
@@ -257,14 +264,6 @@ export const GungiGame: React.FC<GameProps> = observer(
 												backgroundColor="#16CD8B"
 												backgroundColorHover="#00B172"
 												onClick={() => {
-													// if it's your turn
-													let socketPlayerColor: string = '';
-													if (socketPlayer?.userType === 'creator') {
-														socketPlayerColor = 'w';
-													} else if (socketPlayer?.userType === 'opponent') {
-														socketPlayerColor = 'b';
-													}
-
 													if (
 														gungiStore.gameState?.turn === socketPlayerColor
 													) {
@@ -305,25 +304,30 @@ export const GungiGame: React.FC<GameProps> = observer(
 														<LobbyButton
 															size="small"
 															onClick={() => {
-																swal
-																	.fire({
-																		title: <span>Forfeit?</span>,
-																		html: (
-																			<div>
-																				are you sure you want to forfeit?
-																			</div>
-																		),
-																		icon: 'question',
-																		showConfirmButton: true,
-																		showCancelButton: true,
-																		confirmButtonText: 'Yes, forfeit',
-																		confirmButtonColor: '#9045d6',
-																	})
-																	.then((response) => {
-																		if (response.isConfirmed) {
-																			forfeitCallback();
-																		}
-																	});
+																if (
+																	gungiStore.gameState?.turn ===
+																	socketPlayerColor
+																) {
+																	swal
+																		.fire({
+																			title: <span>Forfeit?</span>,
+																			html: (
+																				<div>
+																					are you sure you want to forfeit?
+																				</div>
+																			),
+																			icon: 'question',
+																			showConfirmButton: true,
+																			showCancelButton: true,
+																			confirmButtonText: 'Yes, forfeit',
+																			confirmButtonColor: '#9045d6',
+																		})
+																		.then((response) => {
+																			if (response.isConfirmed) {
+																				forfeitCallback();
+																			}
+																		});
+																}
 															}}
 														>
 															FORFEIT

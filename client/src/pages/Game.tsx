@@ -113,7 +113,6 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 			setGameState(game.gameState);
 
 			if (game.gameState.game_over) {
-				console.log('game: ', game.gameState);
 				socket.emit('game_over', { forfeit: false });
 			}
 		});

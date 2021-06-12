@@ -37,6 +37,7 @@ export interface GameState {
 	legal_moves: Move[];
 	phase: string;
 	turn: string;
+	check_square: string;
 	in_check: boolean;
 	in_checkmate: boolean;
 	in_stalemate: boolean;
@@ -129,12 +130,29 @@ export class InMemorySessionStore implements SessionStore {
 		const session = this.findSession(id);
 		if (session) {
 			const gungi = session.game;
+			let check_square = '';
+			if (gungi.in_check()) {
+				for (let i = 0; i < 9; i++) {
+					for (let k = 0; k < 9; k++) {
+						const tower = gungi.get_board()[i][k];
+						if (
+							tower.some(
+								(x: Piece) =>
+									x?.color === gungi.turn && x?.type === gungi.MARSHAL
+							)
+						) {
+							check_square = `${9 - i}-${k + 1}`;
+						}
+					}
+				}
+			}
 			return {
 				stockpile_black: gungi.get_stockpile(gungi.BLACK),
 				stockpile_white: gungi.get_stockpile(gungi.WHITE),
 				legal_moves: gungi.moves(),
 				phase: gungi.phase,
 				turn: gungi.turn,
+				check_square,
 				in_check: gungi.in_check(),
 				in_checkmate: gungi.in_checkmate(),
 				in_stalemate: gungi.in_stalemate(),
@@ -155,12 +173,30 @@ export class InMemorySessionStore implements SessionStore {
 			const gungi = session.game;
 			gungi.move(move);
 
+			let check_square = '';
+			if (gungi.in_check()) {
+				for (let i = 0; i < 9; i++) {
+					for (let k = 0; k < 9; k++) {
+						const tower = gungi.get_board()[i][k];
+						if (
+							tower.some(
+								(x: Piece) =>
+									x?.color === gungi.turn && x?.type === gungi.MARSHAL
+							)
+						) {
+							check_square = `${9 - i}-${k + 1}`;
+						}
+					}
+				}
+			}
+
 			return {
 				stockpile_black: gungi.get_stockpile(gungi.BLACK),
 				stockpile_white: gungi.get_stockpile(gungi.WHITE),
 				legal_moves: gungi.moves(),
 				phase: gungi.phase,
 				turn: gungi.turn,
+				check_square,
 				in_check: gungi.in_check(),
 				in_checkmate: gungi.in_checkmate(),
 				in_stalemate: gungi.in_stalemate(),
