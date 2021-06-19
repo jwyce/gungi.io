@@ -38,7 +38,12 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 		fetch(`${process.env.REACT_APP_API_URL}/current_rooms`)
 			.then((response) => response.json())
 			.then((data) => {
-				if (data.find((x: any) => x.roomId === gameId)?.gameStarted) {
+				const room = data.find((x: any) => x.roomId === gameId);
+				if (!room) {
+					history.push('/NotFound');
+					return;
+				}
+				if (room.gameStarted) {
 					//@ts-ignore
 					socket.auth = { username, gameId };
 					socket.connect();
