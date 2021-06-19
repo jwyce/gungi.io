@@ -39,11 +39,11 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				const room = data.find((x: any) => x.roomId === gameId);
-				if (!room) {
+				if (!room && gameId) {
 					history.push('/NotFound');
 					return;
 				}
-				if (room.gameStarted) {
+				if (room?.gameStarted) {
 					//@ts-ignore
 					socket.auth = { username, gameId };
 					socket.connect();
