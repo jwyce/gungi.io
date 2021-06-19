@@ -11,6 +11,7 @@ import Input from '../ui/styles/Input';
 import Title from '../ui/styles/Title';
 import Wrapper from '../ui/styles/Wrapper';
 import { MobileWarning } from '../ui/MobileWarning';
+import Subtitle from '../ui/styles/Subtitle';
 
 const LoginForm = styled.form`
 	display: flex;
@@ -38,13 +39,12 @@ export const Login: React.FC<LoginProps> = ({
 			<Wrapper>
 				<HeroParticles />
 
-				<Title size="large" style={{ marginBottom: '15px' }}>
-					Gungi.io
-				</Title>
+				<Title size="large">Gungi.io</Title>
+				<Subtitle style={{ margin: '0' }}>v1.0.8</Subtitle>
 				<img
 					src={accountIcon}
 					alt="account"
-					style={{ width: '10rem', fill: 'white' }}
+					style={{ width: '10rem', fill: 'white', marginTop: '15px' }}
 				/>
 
 				<LoginForm
