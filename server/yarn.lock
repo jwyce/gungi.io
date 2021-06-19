@@ -644,10 +644,10 @@ graceful-fs@^4.1.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-gungi.js@1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/gungi.js/-/gungi.js-1.0.19.tgz#f17f78b5e90b2972bf43de63ef2efe1c0db71e1f"
-  integrity sha512-80HIKi+Wt44YSO8Ig5pW5l8yQihrbPFGPBziJIYIkh+budxhbXHxSMxKqprUi/jaeVEfo+LqU8fSxRpo6zDhcQ==
+gungi.js@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/gungi.js/-/gungi.js-1.0.20.tgz#0f5c83de7ad83c9c1a8fb195e65bfc6cc19c86b1"
+  integrity sha512-UeYAv9hius31T5kOIwRL49W+/1iO8Q+lbX77sURFQx/CkLbut6fykl5J42/e1VAzgYmdmyADgdk+p51Qov5LNA==
   dependencies:
     lodash "^4.17.21"
 

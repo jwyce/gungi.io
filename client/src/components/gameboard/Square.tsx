@@ -212,42 +212,47 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 							if (top === null) {
 								moveType = 'move';
 							} else if (gungiStore.currentSelected !== props.id) {
-								swal
-									.fire({
-										title: <span>Attack or Stack?</span>,
-										showConfirmButton: true,
-										showDenyButton: true,
-										confirmButtonText: 'Attack',
-										confirmButtonColor: '#F53C5E',
-										denyButtonText: 'Stack',
-										denyButtonColor: '#F5AB3C',
-									})
-									.then((response) => {
-										if (response.isConfirmed) {
-											moveType = 'attack';
-										} else if (response.isDenied) {
-											moveType = 'stack';
-										}
+								if (top.color === socketPlayerColor) {
+									moveType = 'stack';
+								} else {
+									swal
+										.fire({
+											title: <span>Attack or Stack?</span>,
+											showConfirmButton: true,
+											showDenyButton: true,
+											confirmButtonText: 'Attack',
+											confirmButtonColor: '#F53C5E',
+											denyButtonText: 'Stack',
+											denyButtonColor: '#F5AB3C',
+										})
+										.then((response) => {
+											if (response.isConfirmed) {
+												moveType = 'attack';
+											} else if (response.isDenied) {
+												moveType = 'stack';
+											}
 
-										const move = {
-											src,
-											dst,
-											type: moveType,
-										};
+											const move = {
+												src,
+												dst,
+												type: moveType,
+											};
 
-										if (
-											gungiStore.gameState?.legal_moves.some(
-												(x) =>
-													JSON.stringify(x.src) === JSON.stringify(move.src) &&
-													x.dst === move.dst &&
-													x.type === move.type
-											)
-										) {
-											gungiStore.currentSelected = undefined;
-											gungiStore.hints = undefined;
-											props.makeMoveCallback(move);
-										}
-									});
+											if (
+												gungiStore.gameState?.legal_moves.some(
+													(x) =>
+														JSON.stringify(x.src) ===
+															JSON.stringify(move.src) &&
+														x.dst === move.dst &&
+														x.type === move.type
+												)
+											) {
+												gungiStore.currentSelected = undefined;
+												gungiStore.hints = undefined;
+												props.makeMoveCallback(move);
+											}
+										});
+								}
 							}
 						}
 					}

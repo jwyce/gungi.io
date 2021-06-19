@@ -250,6 +250,7 @@ export const About: React.FC<AboutProps> = () => {
 									of movement, you can attack; if there is only one piece, your
 									piece must then move into and occupy that square but if you’re
 									attacking a tower, the result is that the tower loses the top
+									and your piece now controls it
 								</li>
 								<li style={{ margin: '0 0 10px 0' }}>
 									Stack – if either a friendly piece or an enemy piece is within
