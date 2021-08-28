@@ -206,6 +206,7 @@ export const Square: React.FC<SquareProps> = observer((props) => {
 							for (let i = 2; i >= 0; i--) {
 								if (tower[i] !== null) {
 									top = tower[i];
+									break;
 								}
 							}
 
