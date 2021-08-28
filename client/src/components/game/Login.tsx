@@ -40,7 +40,7 @@ export const Login: React.FC<LoginProps> = ({
 				<HeroParticles />
 
 				<Title size="large">Gungi.io</Title>
-				<Subtitle style={{ margin: '0' }}>v1.0.8.2</Subtitle>
+				<Subtitle style={{ margin: '0' }}>v1.8.2</Subtitle>
 				<img
 					src={accountIcon}
 					alt="account"
