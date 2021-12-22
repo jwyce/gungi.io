@@ -28,7 +28,7 @@
 - master -> don't touch, this is what's running in production
 
 ## Why did you make this?
-Like many people, I enjoy consuming Japanese media, and I consume A LOT of it. This game appears in the manga/anime Hunter × Hunter, and seemed really interesting and looked like it had a ton of complexity and depth to play around in. 
+This game appears in the manga/anime Hunter × Hunter, and seemed really interesting and looked like it had a ton of complexity and depth to play around in. 
 
 So, inspired by this [reddit post](https://www.reddit.com/r/HunterXHunter/comments/6803yz/revised_rules_of_gungi_in_hunterxhunter_pdf/) which spelled out a complete ruleset, I set out to make it a reality and accessible for anyone to play and explore. 
 
