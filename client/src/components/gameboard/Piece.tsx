@@ -32,6 +32,7 @@ interface PieceProps {
 	stockId?: string;
 	orientation?: string;
 	socketPlayerColor?: string;
+	isSocketPlayer?: boolean;
 }
 
 export const Piece: React.FC<PieceProps> = observer(
@@ -43,6 +44,7 @@ export const Piece: React.FC<PieceProps> = observer(
 		stockId,
 		orientation,
 		socketPlayerColor,
+		isSocketPlayer
 	}) => {
 		const [state, setState] = useState({
 			isDragging: false,
@@ -168,12 +170,12 @@ export const Piece: React.FC<PieceProps> = observer(
 				transform: `translate(${state.translation.x}px, ${state.translation.y}px)`,
 				zIndex: state.isDragging ? 900 : 4,
 				position: state.isDragging ? 'absolute' : 'relative',
-				pointerEvents: state.isDragging ? 'none' : '',
+				pointerEvents: state.isDragging || !isSocketPlayer ? 'none' : '',
 				width: variant === 'normal' ? '80%' : '2.5rem',
 				display: 'block',
 				margin: variant === 'normal' ? '10.02% auto' : '0',
 			}),
-			[state.isDragging, state.translation, variant]
+			[state.isDragging, state.translation, variant, isSocketPlayer]
 		);
 
 		return (

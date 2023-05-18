@@ -353,6 +353,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 										playerName={`${blackPlayer?.username}`}
 										playerStockPile={gameState?.stockpile_black}
 										armySize={gameState.armysize_black}
+										isSocketPlayer={socketPlayerColor === 'b'}
 									/>
 
 									<br />
@@ -361,6 +362,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 										playerName={`${whitePlayer?.username}`}
 										playerStockPile={gameState?.stockpile_white}
 										armySize={gameState.armysize_white}
+										isSocketPlayer={socketPlayerColor === 'w'}
 									/>
 
 									<SpectatorsWrapper>
