@@ -14,6 +14,7 @@ interface StockpilePanelProps {
 	playerName: string;
 	playerStockPile: StockPiece[];
 	armySize: number;
+	isSocketPlayer: boolean;
 }
 
 export const StockpilePanel: React.FC<StockpilePanelProps> = observer(
@@ -76,15 +77,19 @@ export const StockpilePanel: React.FC<StockpilePanelProps> = observer(
 								classes={{ badge: classes.customBadge }}
 								className={classes.margin}
 							>
-								<Icon style={{ fontSize: '2.5rem' }}>
+								<Icon style={{ fontSize: '2.5rem' }}
+								>
 									<Piece
 										stockId={`${props.player}${stock_piece.piece.type}`}
 										icon={`${props.player}1${stock_piece.piece.type}.svg`}
 										variant="small"
+										isSocketPlayer={props.isSocketPlayer}
+
 									/>
 									<Piece
 										icon={`${props.player}1${stock_piece.piece.type}.svg`}
 										variant="small"
+										isSocketPlayer={props.isSocketPlayer}
 									/>
 								</Icon>
 							</Badge>
