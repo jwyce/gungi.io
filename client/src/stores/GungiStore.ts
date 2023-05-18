@@ -5,6 +5,7 @@ import { GameState, Square } from 'src/typings/types';
 class GungiStore {
 	@observable gameState: GameState | undefined = undefined;
 	@observable isDragging = false;
+	@observable setIsDragging = (value: boolean) => this.isDragging = value
 	@observable currentSelected: string | undefined = undefined;
 	@observable squareSelected: Square | undefined = undefined;
 	@observable prevMoveFrom: string | undefined = undefined;

@@ -76,7 +76,7 @@ export const Piece: React.FC<PieceProps> = observer(
 					translation,
 				}));
 
-				gungiStore.isDragging = true;
+				gungiStore.setIsDragging(true)
 				gungiStore.currentSelected = squareId ?? stockId;
 				if (gungiStore.currentSelected === squareId && squareId !== undefined) {
 					const pos = squareId.split('-');
@@ -144,7 +144,7 @@ export const Piece: React.FC<PieceProps> = observer(
 				isDragging: false,
 			}));
 
-			gungiStore.isDragging = false;
+			gungiStore.setIsDragging(false)
 		}, [gungiStore]);
 
 		useEffect(() => {
