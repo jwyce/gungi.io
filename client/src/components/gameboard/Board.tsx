@@ -22,6 +22,7 @@ interface BoardProps {
 	board: (PieceType | null)[][][];
 	orientation: string;
 	socketPlayer: User | undefined;
+	isTurn: string;
 	makeMoveCallback: (move: Move) => void;
 }
 
@@ -29,6 +30,7 @@ export const Board: React.FC<BoardProps> = ({
 	board,
 	orientation,
 	socketPlayer,
+	isTurn,
 	makeMoveCallback,
 }) => {
 	const squares: any[] = [];
@@ -74,6 +76,7 @@ export const Board: React.FC<BoardProps> = ({
 							icon={`${topPiece?.color}${topIndex + 1}${topPiece?.type}.svg`}
 							orientation={orientation}
 							socketPlayerColor={socketPlayerColor}
+							isSocketPlayer={isTurn === socketPlayerColor}
 							belowIcon={
 								pieceBelow
 									? `${pieceBelow?.color}${topIndex}${pieceBelow?.type}.svg`

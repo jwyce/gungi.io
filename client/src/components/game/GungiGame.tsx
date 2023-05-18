@@ -169,6 +169,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 										board={gameState.board}
 										orientation={orientation}
 										socketPlayer={socketPlayer}
+										isTurn={gameState?.turn}
 										makeMoveCallback={makeMoveCallback}
 									/>
 								</BoardWrapper>
@@ -353,7 +354,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 										playerName={`${blackPlayer?.username}`}
 										playerStockPile={gameState?.stockpile_black}
 										armySize={gameState.armysize_black}
-										isSocketPlayer={socketPlayerColor === 'b'}
+										isSocketPlayer={socketPlayer?.userType === 'opponent'}
 									/>
 
 									<br />
@@ -362,7 +363,7 @@ export const GungiGame: React.FC<GameProps> = observer(
 										playerName={`${whitePlayer?.username}`}
 										playerStockPile={gameState?.stockpile_white}
 										armySize={gameState.armysize_white}
-										isSocketPlayer={socketPlayerColor === 'w'}
+										isSocketPlayer={socketPlayer?.userType === 'creator'}
 									/>
 
 									<SpectatorsWrapper>
