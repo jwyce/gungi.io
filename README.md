@@ -35,7 +35,7 @@ This game appears in the manga/anime Hunter × Hunter, and seemed really interes
 
 So, inspired by this [reddit post](https://www.reddit.com/r/HunterXHunter/comments/6803yz/revised_rules_of_gungi_in_hunterxhunter_pdf/) which spelled out a complete ruleset, I set out to make it a reality and accessible for anyone to play and explore. 
 
-An additional side benefit in making this was to use it as a learning opporutnity to familiarize myself with some of the latest popular web technologies, and this is the first project of more to come!
+An additional side benefit in making this was to use it as a learning opportunity to familiarize myself with some of the latest popular web technologies, and this is the first project of more to come!
 
 ## How to run locally
 * Fork the repository
