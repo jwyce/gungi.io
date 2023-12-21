@@ -59,6 +59,7 @@ export const Game: React.FC<RouteComponentProps> = ({ history }) => {
 	};
 
 	const makeMove = (move: Move) => {
+		console.log({ roomId, move })
 		socket.emit('make_move', { roomId, move });
 	};
 

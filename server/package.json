@@ -15,11 +15,15 @@
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
+		"bufferutil": "^4.0.7",
 		"cors": "^2.8.5",
 		"dotenv-safe": "^8.2.0",
+		"eiows": "^6.3.0",
 		"express": "^4.17.1",
 		"gungi.js": "1.0.20",
 		"socket.io": "^3.1.2",
+		"socket.io-msgpack-parser": "^3.0.2",
+		"utf-8-validate": "^6.0.3",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {

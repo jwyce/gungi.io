@@ -19,6 +19,7 @@
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "4.0.1",
 		"socket.io-client": "^3.1.2",
+		"socket.io-msgpack-parser": "^3.0.2",
 		"styled-components": "^5.2.1",
 		"sweetalert2": "^11.0.16",
 		"sweetalert2-react-content": "^4.0.1",
@@ -26,7 +27,7 @@
 	},
 	"proxy": "http://localhost:4000",
 	"scripts": {
-		"start": "react-scripts start",
+		"start": "rm .eslintcache && react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject"

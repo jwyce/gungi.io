@@ -3,9 +3,8 @@ import 'dotenv-safe/config';
 import cors from 'cors';
 import express from 'express';
 import { v4 } from 'uuid';
-
-import { InMemorySessionStore, Move, User } from './sessionStore';
 import { logoSvg } from './helper';
+import { InMemorySessionStore, Move, User } from './sessionStore';
 
 const PORT = process.env.PORT;
 const app = express();
@@ -19,9 +18,26 @@ app.use(
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
 	cors: { origin: process.env.CORS_ORIGIN, methods: ['GET', 'POST'] },
-	upgradeTimeout: 30000,
-	pingInterval: 10000,
-	pingTimeout: 60000,
+    wsEngine: 'eiows',
+	pingInterval: 50,
+	perMessageDeflate: {
+		threshold: 250, // defaults to 1024
+
+		zlibDeflateOptions: {
+			chunkSize: 8 * 1024, // defaults to 16 * 1024
+		},
+
+		zlibInflateOptions: {
+			windowBits: 14, // defaults to 15
+			memLevel: 7, // defaults to 8
+		},
+
+		clientNoContextTakeover: true, // defaults to negotiated value.
+		serverNoContextTakeover: true, // defaults to negotiated value.
+		serverMaxWindowBits: 10, // defaults to negotiated value.
+
+		concurrencyLimit: 20, // defaults to 10
+	}
 });
 
 const { Gungi } = require('gungi.js');
