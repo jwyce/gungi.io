@@ -1,20 +1,16 @@
 <a href="https://gungi.io"><p align="center">
-<img height=100 src="client/src/assets/gungi-github.svg?raw=true"/>
+<img height=350 src="https://www.gungi.io/images/og-image.png"/>
 </p></a>
 <p align="center">
   <strong>Online real-time website to play Gungi from Hunter × Hunter ⚡</strong>
 </p>
-<p align="center">
- 
-  <a href="https://gungi.io">
-    <img src="https://img.shields.io/endpoint?color=9045d6&style=for-the-badge&url=https%3A%2F%2Fapi.gungi.io%2Fshields" alt="gungi - active games" />
-  </a>
-</p>
 
 ---
 
-## WARNING
-This project is no longer actively maintained so the site might be down whenever I run out of free credits. When I get time in the future I would love to revisit the project and make it even better! Thanks for your understanding :)
+> [!IMPORTANT]  
+> **This repository is a legacy snapshot of the original Gungi.io codebase.**  
+> The new [gungi.io](https://gungi.io) has been rebuilt from the ground up.  
+> This repo now serves as an **issue tracker** for the new platform — [report bugs or request features](../../issues).
 
 ## Structure
 
